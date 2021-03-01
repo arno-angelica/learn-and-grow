@@ -11,8 +11,6 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.arno.grow.user.web.db.DBConnectionManager.CREATE_USERS_TABLE_DDL_SQL;
-
 /**
  * @desc:
  * @author: Arno.KV
