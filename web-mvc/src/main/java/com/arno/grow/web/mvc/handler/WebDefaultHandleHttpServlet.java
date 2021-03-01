@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import static org.apache.commons.lang.StringUtils.substringAfter;
 
@@ -55,13 +57,20 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
     private static final String CONTEXT_TYPE = "application/json; charset=utf-8";
 
     private static String[] SCAN_PATHS;
-    private static final Map<String, SupportMethodInfo> PATH_METHOD_PATH = new HashMap<>();
+    private static final Map<String, SupportMethodInfo> PATH_METHOD_PATH_MAP = new HashMap<>();
+
+    protected static final Logger log = Logger
+            .getLogger(WebDefaultHandleHttpServlet.class.getName());
 
 
     @Override
     public void init() throws ServletException {
         initPropertiesConfig();
-        initHandleClassMethod();
+        List<Class<?>> allClasses = MvcClassUtils.findLoadClassInPackages(SCAN_PATHS);
+        if (allClasses != null && allClasses.size() > 0) {
+            initHandleClassMethod(allClasses);
+            initSubclass(allClasses);
+        }
     }
 
     @Override
@@ -70,7 +79,7 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
         String servletContextPath = request.getContextPath();
         String requestMappingPath = substringAfter(requestURI,
                 StringUtils.replace(servletContextPath, "//", "/"));
-        SupportMethodInfo supportMethodInfo = PATH_METHOD_PATH.get(requestMappingPath);
+        SupportMethodInfo supportMethodInfo = PATH_METHOD_PATH_MAP.get(requestMappingPath);
         if (supportMethodInfo == null) {
             // 404
 //            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -121,7 +130,6 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
                 writer.close();
             }
         }
-
     }
 
     /**
@@ -184,9 +192,9 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
     /**
      * 初始化请求处理类
      */
-    private void initHandleClassMethod() {
+    private void  initHandleClassMethod(List<Class<?>> allClasses) {
         // 获取 controller 类
-        List<Class<?>> scanClasses = scanClasses();
+        List<Class<?>> scanClasses = scanClasses(allClasses);
         if (scanClasses.size() == 0) {
             return;
         }
@@ -204,11 +212,11 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
                     String requestPath = classRequestPath + methodRequestPath;
                     // 初始化 SupportMethodInfo
                     SupportMethodInfo supportMethodInfo = new SupportMethodInfo(requestPath, method, getMethodSupportRequestType(method), instance);
-                    if (PATH_METHOD_PATH.containsKey(requestPath)) {
+                    if (PATH_METHOD_PATH_MAP.containsKey(requestPath)) {
                         throw new RuntimeException("The path : " + requestPath + " already exists");
                     }
                     // 存入缓存
-                    PATH_METHOD_PATH.put(requestPath, supportMethodInfo);
+                    PATH_METHOD_PATH_MAP.put(requestPath, supportMethodInfo);
                 }
             }
         } catch (Exception e) {
@@ -217,14 +225,19 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
     }
 
     /**
+     * 初始化子类
+     * @param classes
+     */
+    protected void initSubclass(List<Class<?>> classes) {}
+
+    /**
      * 获取指定的类
      *
      * @return
      */
-    private List<Class<?>> scanClasses() {
+    private List<Class<?>> scanClasses(List<Class<?>> allClasses) {
         List<Class<?>> scanClasses = new ArrayList<>();
         // 获取包下所有的类
-        List<Class<?>> allClasses = MvcClassUtils.findLoadClassInPackages(SCAN_PATHS);
         // 获取标注 @WebController 注解的类
         List<Class<?>> annotationClasses = MvcClassUtils.findAnnotationClasses(Collections.singletonList(WebController.class), allClasses);
         if (annotationClasses.size() > 0) {

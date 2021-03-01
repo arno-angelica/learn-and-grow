@@ -30,11 +30,6 @@ public class SupportMethodInfo implements Serializable {
     private final Set<String> supportMethods;
 
     /**
-     * 请求报文类型 {@link MediaType}
-     */
-    private String mediaType;
-
-    /**
      * 对象实例
      */
     private final Object instance;

@@ -2,6 +2,7 @@ package com.arno.grow.user.web.db;
 
 
 import com.arno.grow.user.web.repository.domain.User;
+import com.arno.grow.web.mvc.annotation.DbRepository;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -16,14 +17,10 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+@DbRepository("derbyDatabaseConfig")
 public class DBConnectionManager {
 
     private Connection connection;
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
     public Connection getConnection() {
         return this.connection;
     }
