@@ -29,10 +29,10 @@
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="请输入密码" required>
         <br>
         <label for="inputPassword" class="sr-only">昵称</label>
-        <input type="password" id="name" class="form-control" name="name" placeholder="请输入昵称" required>
+        <input type="text" id="name" class="form-control" name="name" placeholder="请输入昵称" required>
         <br>
         <label for="inputPassword" class="sr-only">手机号</label>
-        <input type="password" id="phoneNumber" class="form-control" name="phoneNumber" placeholder="请输入手机号" required>
+        <input type="text" id="phoneNumber" class="form-control" name="phoneNumber" placeholder="请输入手机号" required>
         <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Register
         </button>

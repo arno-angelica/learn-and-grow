@@ -17,7 +17,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-@DbRepository("derbyDatabaseConfig")
+@Deprecated
 public class DBConnectionManager {
 
     private Connection connection;

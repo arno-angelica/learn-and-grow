@@ -3,7 +3,7 @@ package com.arno.grow.user.web.repository;
 
 import com.arno.grow.user.web.repository.domain.User;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 1.0s
  */
+@Deprecated
 public class InMemoryUserRepository implements UserRepository {
 
     private Map<Long, User> repository = new ConcurrentHashMap<>();
@@ -49,7 +50,12 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public Collection<User> getAll() {
-        return repository.values();
+    public List<User> getAll() {
+        return null;
+    }
+
+    @Override
+    public boolean deleteAll() {
+        return false;
     }
 }

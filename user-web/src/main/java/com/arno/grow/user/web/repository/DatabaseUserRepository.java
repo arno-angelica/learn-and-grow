@@ -1,7 +1,9 @@
 package com.arno.grow.user.web.repository;
 
-import com.arno.grow.user.web.db.DBConnectionManager;
 import com.arno.grow.user.web.repository.domain.User;
+import com.arno.grow.web.mvc.annotation.Autowired;
+import com.arno.grow.web.mvc.annotation.Service;
+import com.arno.grow.web.mvc.db.DbManager;
 import com.arno.grow.web.mvc.function.ThrowableFunction;
 
 import java.beans.BeanInfo;
@@ -11,8 +13,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,34 +24,40 @@ import java.util.logging.Logger;
 
 import static org.apache.commons.lang.ClassUtils.wrapperToPrimitive;
 
+@Service
 public class DatabaseUserRepository implements UserRepository {
 
-    private static Logger logger = Logger.getLogger(DatabaseUserRepository.class.getName());
+    private static final Logger logger = Logger.getLogger(DatabaseUserRepository.class.getName());
 
     /**
      * 通用处理方式
      */
-    private static Consumer<Throwable> COMMON_EXCEPTION_HANDLER = e -> logger.log(Level.SEVERE, e.getMessage());
+    private static final Consumer<Throwable> COMMON_EXCEPTION_HANDLER = e -> logger.log(Level.SEVERE, e.getMessage());
 
-    public static final String INSERT_USER_DML_SQL =
-            "INSERT INTO users(name,password,email,phoneNumber) VALUES " +
+    public static final String INSERT_USER_DML_SQL = "INSERT INTO users(name,password,email,phoneNumber) VALUES " +
                     "(?,?,?,?)";
+    public static final String DELETE_USER_DML_SQL = "DELETE FROM users";
 
     public static final String QUERY_ALL_USERS_DML_SQL = "SELECT id,name,password,email,phoneNumber FROM users";
 
-    private final DBConnectionManager dbConnectionManager;
-
-    public DatabaseUserRepository(DBConnectionManager dbConnectionManager) {
-        this.dbConnectionManager = dbConnectionManager;
-    }
-
-    private Connection getConnection() {
-        return dbConnectionManager.getConnection();
-    }
+    @Autowired
+    private DbManager dbManager;
 
     @Override
     public boolean save(User user) {
-        return false;
+        try {
+            PreparedStatement statement = dbManager.getConnection().prepareStatement(INSERT_USER_DML_SQL);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getPhoneNumber());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        } finally {
+            dbManager.release();
+        }
+        return true;
     }
 
     @Override
@@ -71,13 +79,33 @@ public class DatabaseUserRepository implements UserRepository {
     public User getByNameAndPassword(String userName, String password) {
         return executeQuery("SELECT id,name,password,email,phoneNumber FROM users WHERE name=? and password=?",
                 resultSet -> {
-                    // TODO
-                    return new User();
+                    BeanInfo userBeanInfo = Introspector.getBeanInfo(User.class, Object.class);
+                    User user = null;
+                    while (resultSet.next()) {
+                        user = new User(); // 如果存在并且游标滚动 // SQLException
+                        for (PropertyDescriptor propertyDescriptor : userBeanInfo.getPropertyDescriptors()) {
+                            String fieldName = propertyDescriptor.getName();
+                            Class fieldType = propertyDescriptor.getPropertyType();
+                            String methodName = resultSetMethodMappings.get(fieldType);
+                            // 可能存在映射关系（不过此处是相等的）
+                            String columnLabel = mapColumnLabel(fieldName);
+                            Method resultSetMethod = ResultSet.class.getMethod(methodName, String.class);
+                            // 通过放射调用 getXXX(String) 方法
+                            Object resultValue = resultSetMethod.invoke(resultSet, columnLabel);
+                            // 获取 User 类 Setter方法
+                            // PropertyDescriptor ReadMethod 等于 Getter 方法
+                            // PropertyDescriptor WriteMethod 等于 Setter 方法
+                            Method setterMethodFromUser = propertyDescriptor.getWriteMethod();
+                            // 以 id 为例，  user.setId(resultSet.getLong("id"));
+                            setterMethodFromUser.invoke(user, resultValue);
+                        }
+                    }
+                    return user;
                 }, COMMON_EXCEPTION_HANDLER, userName, password);
     }
 
     @Override
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         return executeQuery("SELECT id,name,password,email,phoneNumber FROM users", resultSet -> {
             // BeanInfo -> IntrospectionException
             BeanInfo userBeanInfo = Introspector.getBeanInfo(User.class, Object.class);
@@ -100,11 +128,25 @@ public class DatabaseUserRepository implements UserRepository {
                     // 以 id 为例，  user.setId(resultSet.getLong("id"));
                     setterMethodFromUser.invoke(user, resultValue);
                 }
+                users.add(user);
             }
             return users;
         }, e -> {
             // 异常处理
         });
+    }
+
+    @Override
+    public boolean deleteAll() {
+        try {
+            PreparedStatement statement = dbManager.getConnection().prepareStatement(DELETE_USER_DML_SQL);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        } finally {
+            dbManager.release();
+        }
+        return false;
     }
 
     /**
@@ -115,14 +157,14 @@ public class DatabaseUserRepository implements UserRepository {
      */
     protected <T> T executeQuery(String sql, ThrowableFunction<ResultSet, T> function,
                                  Consumer<Throwable> exceptionHandler, Object... args) {
-        Connection connection = getConnection();
+        Connection connection = dbManager.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             for (int i = 0; i < args.length; i++) {
                 Object arg = args[i];
-                Class argType = arg.getClass();
+                Class<?> argType = arg.getClass();
 
-                Class wrapperType = wrapperToPrimitive(argType);
+                Class<?> wrapperType = wrapperToPrimitive(argType);
 
                 if (wrapperType == null) {
                     wrapperType = argType;
@@ -131,7 +173,8 @@ public class DatabaseUserRepository implements UserRepository {
                 // Boolean -> boolean
                 String methodName = preparedStatementMethodMappings.get(argType);
                 Method method = PreparedStatement.class.getMethod(methodName, wrapperType);
-                method.invoke(preparedStatement, i + 1, args);
+                int j = i + 1;
+                method.invoke(preparedStatement, j, args);
             }
             ResultSet resultSet = preparedStatement.executeQuery();
             // 返回一个 POJO List -> ResultSet -> POJO List
@@ -139,6 +182,8 @@ public class DatabaseUserRepository implements UserRepository {
             return function.apply(resultSet);
         } catch (Throwable e) {
             exceptionHandler.accept(e);
+        } finally {
+            dbManager.release();
         }
         return null;
     }
@@ -151,17 +196,15 @@ public class DatabaseUserRepository implements UserRepository {
     /**
      * 数据类型与 ResultSet 方法名映射
      */
-    static Map<Class, String> resultSetMethodMappings = new HashMap<>();
+    static Map<Class<?>, String> resultSetMethodMappings = new HashMap<>();
 
-    static Map<Class, String> preparedStatementMethodMappings = new HashMap<>();
+    static Map<Class<?>, String> preparedStatementMethodMappings = new HashMap<>();
 
     static {
         resultSetMethodMappings.put(Long.class, "getLong");
         resultSetMethodMappings.put(String.class, "getString");
-
         preparedStatementMethodMappings.put(Long.class, "setLong"); // long
         preparedStatementMethodMappings.put(String.class, "setString"); //
-
 
     }
 }

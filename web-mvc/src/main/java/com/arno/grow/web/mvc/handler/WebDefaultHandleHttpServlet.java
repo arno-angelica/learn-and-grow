@@ -58,6 +58,7 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
 
     private static String[] SCAN_PATHS;
     private static final Map<String, SupportMethodInfo> PATH_METHOD_PATH_MAP = new HashMap<>();
+    private static final Map<String, String> propertiesMap = new HashMap<>();
 
     protected static final Logger log = Logger
             .getLogger(WebDefaultHandleHttpServlet.class.getName());
@@ -135,6 +136,11 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
         }
     }
 
+    @Override
+    public void destroy() {
+        handler.destroy();
+    }
+
     /**
      * 处理请求参数
      *
@@ -182,7 +188,13 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
             Properties properties = new Properties();
             properties.load(in);
             // 获取配置文件中的 scan.package 配置
-            scanPath = properties.getProperty(SCAN_PACKAGE_KEY);
+            Enumeration<?> enumeration = properties.propertyNames();
+            String key;
+            while (enumeration.hasMoreElements()) {
+                key = (String) enumeration.nextElement();
+                propertiesMap.put(key, properties.getProperty(key));
+            }
+            scanPath = propertiesMap.get(SCAN_PACKAGE_KEY);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -238,7 +250,7 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
      * @param classes
      */
     protected void initSubclass(List<Class<?>> classes) {
-        handler.initSubclass(classes);
+        handler.initSubclass(classes, propertiesMap);
     }
 
     /**

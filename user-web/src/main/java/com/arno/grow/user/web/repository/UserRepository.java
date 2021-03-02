@@ -4,6 +4,7 @@ package com.arno.grow.user.web.repository;
 import com.arno.grow.user.web.repository.domain.User;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 用户存储仓库
@@ -22,5 +23,7 @@ public interface UserRepository {
 
     User getByNameAndPassword(String userName, String password);
 
-    Collection<User> getAll();
+    List<User> getAll();
+
+    boolean deleteAll();
 }

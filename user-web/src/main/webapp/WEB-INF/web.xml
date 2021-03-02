@@ -15,11 +15,6 @@
         <servlet-name>WebDefaultHandleHttpServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-    <listener>
-        <listener-class>com.arno.grow.user.web.listener.DerbyDatabaseInitListener</listener-class>
-    </listener>
-
     <jsp-config>
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>
