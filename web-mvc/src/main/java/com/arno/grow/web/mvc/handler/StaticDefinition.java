@@ -1,7 +1,5 @@
 package com.arno.grow.web.mvc.handler;
 
-import com.arno.grow.web.mvc.handler.ContextDefinition;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,6 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StaticDefinition {
 
-    public static Map<String, ContextDefinition> CONTEXT_MAP = new ConcurrentHashMap<>();
+    public static Map<String, BeanDefinition> CONTEXT_MAP = new ConcurrentHashMap<>();
 
 }

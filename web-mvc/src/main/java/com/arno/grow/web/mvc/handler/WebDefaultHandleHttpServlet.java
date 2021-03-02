@@ -62,9 +62,12 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
     protected static final Logger log = Logger
             .getLogger(WebDefaultHandleHttpServlet.class.getName());
 
+    private DefaultBeanDefinitionInitHandler handler;
+
 
     @Override
     public void init() throws ServletException {
+        handler = new DefaultBeanDefinitionInitHandler();
         initPropertiesConfig();
         List<Class<?>> allClasses = MvcClassUtils.findLoadClassInPackages(SCAN_PATHS);
         if (allClasses != null && allClasses.size() > 0) {
@@ -204,7 +207,13 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
                 String classRequestPath = getClassRequestPath(clazz);
                 Method[] publicMethods = clazz.getDeclaredMethods();
                 // 初始化实例对象，反射时使用
+                if (StaticDefinition.CONTEXT_MAP.containsKey(clazz.getSimpleName().toUpperCase())) {
+                    throw new RuntimeException("named : " + clazz.getSimpleName() + "already exists");
+                }
                 Object instance = clazz.newInstance();
+                BeanDefinition definition = new BeanDefinition(instance, clazz.getSimpleName(), clazz);
+                StaticDefinition.CONTEXT_MAP.put(clazz.getSimpleName().toUpperCase(), definition);
+
                 for (Method method : publicMethods) {
                     // 获取方法上的请求路径
                     String methodRequestPath = getMethodRequestPath(method);
@@ -228,7 +237,9 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
      * 初始化子类
      * @param classes
      */
-    protected void initSubclass(List<Class<?>> classes) {}
+    protected void initSubclass(List<Class<?>> classes) {
+        handler.initSubclass(classes);
+    }
 
     /**
      * 获取指定的类

@@ -63,8 +63,8 @@ public class ServletInitListener implements ServletContextListener {
     }
 
     private void initializeSchema(Connection connection) throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.execute(CREATE_USERS_TABLE_DDL_SQL);
+//        Statement statement = connection.createStatement();
+//        statement.execute(CREATE_USERS_TABLE_DDL_SQL);
     }
 
 
