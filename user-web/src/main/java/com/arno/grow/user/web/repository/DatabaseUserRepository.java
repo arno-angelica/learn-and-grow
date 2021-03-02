@@ -174,7 +174,7 @@ public class DatabaseUserRepository implements UserRepository {
                 String methodName = preparedStatementMethodMappings.get(argType);
                 Method method = PreparedStatement.class.getMethod(methodName, wrapperType);
                 int j = i + 1;
-                method.invoke(preparedStatement, j, args);
+                method.invoke(preparedStatement, j, arg);
             }
             ResultSet resultSet = preparedStatement.executeQuery();
             // 返回一个 POJO List -> ResultSet -> POJO List
