@@ -38,7 +38,7 @@ public class User implements Serializable {
     private String email;
 
     @Column
-    @Mod11Check
+    @Mod11Check(message = "非法")
     private String phoneNumber;
 
     public Long getId() {
