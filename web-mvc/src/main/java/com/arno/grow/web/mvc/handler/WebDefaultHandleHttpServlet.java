@@ -207,7 +207,7 @@ public class WebDefaultHandleHttpServlet extends HttpServlet {
     /**
      * 初始化请求处理类
      */
-    private void  initHandleClassMethod(List<Class<?>> allClasses) {
+    private void initHandleClassMethod(List<Class<?>> allClasses) {
         // 获取 controller 类
         List<Class<?>> scanClasses = scanClasses(allClasses);
         if (scanClasses.size() == 0) {

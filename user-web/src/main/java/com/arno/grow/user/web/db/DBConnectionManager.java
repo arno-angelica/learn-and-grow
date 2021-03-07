@@ -2,8 +2,11 @@ package com.arno.grow.user.web.db;
 
 
 import com.arno.grow.user.web.repository.domain.User;
-import com.arno.grow.web.mvc.annotation.DbRepository;
+import com.arno.learn.grow.tiny.web.annotation.Service;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.sql.DataSource;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -16,23 +19,74 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Deprecated
-public class DBConnectionManager {
+public class DBConnectionManager { // JNDI Component
 
-    private Connection connection;
-    public Connection getConnection() {
-        return this.connection;
+    private final Logger logger = Logger.getLogger(DBConnectionManager.class.getName());
+
+    @Resource(name = "jdbc/UserPlatformDB")
+    private DataSource dataSource;
+
+    @Resource(name = "bean/EntityManager")
+    private EntityManager entityManager;
+
+//    public Connection getConnection() {
+//        ComponentContext context = ComponentContext.getInstance();
+//        // 依赖查找
+//        DataSource dataSource = context.getComponent("jdbc/UserPlatformDB");
+//        Connection connection = null;
+//        try {
+//            connection = dataSource.getConnection();
+//        } catch (SQLException e) {
+//            logger.log(Level.SEVERE, e.getMessage());
+//        }
+//        if (connection != null) {
+//            logger.log(Level.INFO, "获取 JNDI 数据库连接成功！");
+//        }
+//        return connection;
+//    }
+
+    public EntityManager getEntityManager() {
+        logger.info("当前 EntityManager 实现类：" + entityManager.getClass().getName());
+        return entityManager;
     }
 
-    public void releaseConnection() {
-        if (this.connection != null) {
-            try {
-                this.connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e.getCause());
-            }
+    public Connection getConnection() {
+        // 依赖查找
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getMessage());
         }
+        if (connection != null) {
+            logger.log(Level.INFO, "获取 JNDI 数据库连接成功！");
+        }
+        return connection;
+    }
+
+
+//    private Connection connection;
+//
+//    public void setConnection(Connection connection) {
+//        this.connection = connection;
+//    }
+//
+//    public Connection getConnection() {
+//        return this.connection;
+//    }
+
+    public void releaseConnection() {
+//        if (this.connection != null) {
+//            try {
+//                this.connection.close();
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e.getCause());
+//            }
+//        }
     }
 
     public static final String DROP_USERS_TABLE_DDL_SQL = "DROP TABLE users";
@@ -155,4 +209,5 @@ public class DBConnectionManager {
         typeMethodMappings.put(Long.class, "getLong");
         typeMethodMappings.put(String.class, "getString");
     }
+
 }

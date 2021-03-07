@@ -1,6 +1,5 @@
 package com.arno.grow.web.mvc.handler;
 
-import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Set;

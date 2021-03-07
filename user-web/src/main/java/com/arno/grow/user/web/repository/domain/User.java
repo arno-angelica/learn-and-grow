@@ -1,7 +1,17 @@
 package com.arno.grow.user.web.repository.domain;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Mod11Check;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
+
+import static javax.persistence.GenerationType.AUTO;
 
 /**
  * @desc:
@@ -9,17 +19,26 @@ import java.util.Objects;
  * @date: 2021/2/28 下午6:27
  * @version:
  */
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 8198415428274264820L;
+    @Id
+    @GeneratedValue(strategy = AUTO)
     private Long id;
 
+    @Column
     private String name;
 
+    @Column
+    @Length(min = 6, max = 32, message = "需6-32位")
     private String password;
 
+    @Column
     private String email;
 
+    @Column
+    @Mod11Check
     private String phoneNumber;
 
     public Long getId() {
@@ -85,5 +104,4 @@ public class User implements Serializable {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
-
 }

@@ -5,14 +5,17 @@
          http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          metadata-complete="true" version="2.5">
 
+    <listener>
+        <listener-class>com.arno.learn.grow.tiny.web.context.TinyContextLoaderListener</listener-class>
+    </listener>
     <servlet>
-        <servlet-name>WebDefaultHandleHttpServlet</servlet-name>
-        <servlet-class>com.arno.grow.web.mvc.handler.WebDefaultHandleHttpServlet</servlet-class>
+        <servlet-name>TinyWebDefaultHttpServlet</servlet-name>
+        <servlet-class>com.arno.learn.grow.tiny.web.servlet.TinyWebDefaultHttpServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>WebDefaultHandleHttpServlet</servlet-name>
+        <servlet-name>TinyWebDefaultHttpServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <jsp-config>

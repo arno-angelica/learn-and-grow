@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context> <!-- 上下文资源/组件声明（类似于 Spring 上下文）-->
+
+    <!-- Apache Commons Digester (Read-Only) 表达式（规则） -->
+    <!-- Apache Commons DataSource Connection Pool(DBCP) 1.x -->
+    <!--
+    JNDI : Java Naming and Directory Interface
+    ENV -> java:comp/env
+                        /bean
+                             /DBConnectionManager
+
+    =      java:comp/env/bean/DBConnectionManager
+
+    Tomcat JNDI : http://tomcat.apache.org/tomcat-7.0-doc/jndi-resources-howto.html
+    -->
+    <!-- 资源或者组件类似于 Spring Bean -->
+<!--    <Resource name="jdbc/UserPlatformDB"-->
+<!--              type="javax.sql.DataSource" auth="Container"-->
+<!--              description="Derby database for User Platform"-->
+<!--              maxActive="100" maxIdle="30" maxWait="10000"-->
+<!--              username="" password=""-->
+<!--              driverClassName="org.apache.derby.jdbc.EmbeddedDriver"-->
+<!--              url="jdbc:derby:db/UserPlatformDB;create=true"/>-->
+
+    <!-- FactoryBean -->
+    <!-- db source -->
+    <Resource name="bean/MyDataSourceManager" auth="Container"
+              type="com.arno.grow.user.web.db.jpa.MyDataSourceManager"
+              factory="org.apache.naming.factory.BeanFactory"/>
+   <!-- db -->
+    <Resource name="bean/DbManager" auth="Container"
+              type="com.arno.grow.user.web.db.DbManager"
+              factory="org.apache.naming.factory.BeanFactory"/>
+
+    <!-- 用户仓库 -->
+    <Resource name="bean/DatabaseUserRepository" auth="Container"
+              type="com.arno.grow.user.web.repository.DatabaseUserRepository"
+              factory="org.apache.naming.factory.BeanFactory"/>
+
+
+    <!-- 事务管理 -->
+    <Resource name="bean/EntityManager" auth="Container"
+              type="com.arno.grow.user.web.db.jpa.DelegatingEntityManager"
+              factory="org.apache.naming.factory.BeanFactory"/>
+
+    <!-- 数据校验 -->
+    <Resource name="bean/Validator" auth="Container"
+              type="com.arno.grow.user.web.validator.DelegatingValidator"
+              factory="org.apache.naming.factory.BeanFactory"/>
+
+    <!-- user service -->
+    <Resource name="bean/UserService" auth="Container"
+              type="com.arno.grow.user.web.service.UserInfoService"
+              factory="org.apache.naming.factory.BeanFactory"/>
+
+    <!--user controller -->
+    <Resource name="bean/UserController" auth="Container"
+              type="com.arno.grow.user.web.controller.UserController"
+              factory="org.apache.naming.factory.BeanFactory"/>
+
+</Context>

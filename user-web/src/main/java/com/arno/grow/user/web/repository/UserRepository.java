@@ -15,6 +15,8 @@ public interface UserRepository {
 
     boolean save(User user);
 
+    boolean saveTransaction(User user);
+
     boolean deleteById(Long userId);
 
     boolean update(User user);

@@ -1,11 +1,13 @@
 package com.arno.grow.user.web.repository;
 
+import com.arno.grow.user.web.db.DbManager;
 import com.arno.grow.user.web.repository.domain.User;
-import com.arno.grow.web.mvc.annotation.Autowired;
-import com.arno.grow.web.mvc.annotation.Service;
-import com.arno.grow.web.mvc.db.DbManager;
-import com.arno.grow.web.mvc.function.ThrowableFunction;
+import com.arno.learn.grow.tiny.web.annotation.Autowired;
+import com.arno.learn.grow.tiny.web.annotation.Service;
+import com.arno.learn.grow.tiny.web.function.ThrowableFunction;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -24,7 +26,8 @@ import java.util.logging.Logger;
 
 import static org.apache.commons.lang.ClassUtils.wrapperToPrimitive;
 
-@Service
+
+@Service("bean/DatabaseUserRepository")
 public class DatabaseUserRepository implements UserRepository {
 
     private static final Logger logger = Logger.getLogger(DatabaseUserRepository.class.getName());
@@ -40,9 +43,11 @@ public class DatabaseUserRepository implements UserRepository {
 
     public static final String QUERY_ALL_USERS_DML_SQL = "SELECT id,name,password,email,phoneNumber FROM users";
 
-    @Autowired
+    @Autowired("bean/DbManager")
     private DbManager dbManager;
 
+    @Autowired("bean/EntityManager")
+    private EntityManager entityManager;
     @Override
     public boolean save(User user) {
         try {
@@ -57,6 +62,20 @@ public class DatabaseUserRepository implements UserRepository {
         } finally {
             dbManager.release();
         }
+        return true;
+    }
+
+    public boolean saveTransaction(User user) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            entityManager.persist(user);
+//            System.out.println(1/0);
+        } catch (Exception e) {
+            transaction.rollback();
+            return false;
+        }
+        transaction.commit();
         return true;
     }
 
