@@ -96,7 +96,7 @@ public class TinyWebDefaultHttpServlet extends HttpServlet {
             writer = response.getWriter();
             writer.append(respStr);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         } finally {
             if (writer != null) {
                 writer.close();

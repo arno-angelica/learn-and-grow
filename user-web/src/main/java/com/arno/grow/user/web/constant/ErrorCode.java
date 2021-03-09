@@ -7,7 +7,8 @@ package com.arno.grow.user.web.constant;
  * @version:
  */
 public enum ErrorCode {
-    SUCCESS(10000, "success");
+    SUCCESS(10000, "success"),
+    PARAM_ERROR(10001, "success"),
 
     ;
 

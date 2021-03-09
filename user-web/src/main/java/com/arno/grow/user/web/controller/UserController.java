@@ -36,7 +36,7 @@ public class UserController {
     @GET
     @POST
     @WebRequestMapping(value = "register")
-    public String register(UserRegisterRequest request) {
+    public BaseResult<Void> register(UserRegisterRequest request) {
         return userInfoService.saveUser(request);
     }
 

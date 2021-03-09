@@ -1,5 +1,6 @@
 package com.arno.grow.user.web.repository.domain;
 
+import com.arno.grow.user.web.validator.PhoneValid;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Mod11Check;
 
@@ -31,14 +32,14 @@ public class User implements Serializable {
     private String name;
 
     @Column
-    @Length(min = 6, max = 32, message = "需6-32位")
+    @Length(min = 6, max = 32, message = "密码需6-32位")
     private String password;
 
     @Column
     private String email;
 
     @Column
-    @Mod11Check(message = "非法")
+    @PhoneValid(message = "手机号非法")
     private String phoneNumber;
 
     public Long getId() {

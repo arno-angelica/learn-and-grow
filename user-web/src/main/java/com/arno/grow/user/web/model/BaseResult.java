@@ -23,14 +23,23 @@ public class BaseResult<T> implements Serializable {
         this.data = data;
     }
 
+    public BaseResult() {
+        this.code = ErrorCode.SUCCESS.getCode();
+        this.message = ErrorCode.SUCCESS.getMessage();
+    }
+
     public BaseResult(int code, String message) {
         this.code = code;
         this.message = message;
         this.data = null;
     }
 
-    public static BaseResult<Object> createFail(ErrorCode errorCode) {
+    public static <T> BaseResult<T> createFail(ErrorCode errorCode) {
         return new BaseResult<>(errorCode.getCode(), errorCode.getMessage());
+    }
+
+    public static <T> BaseResult<T> createFail(ErrorCode errorCode, String message) {
+        return new BaseResult<>(errorCode.getCode(), message);
     }
 
     public int getCode() {

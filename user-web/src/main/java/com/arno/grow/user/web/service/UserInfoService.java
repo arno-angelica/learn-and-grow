@@ -1,5 +1,6 @@
 package com.arno.grow.user.web.service;
 
+import com.arno.grow.user.web.constant.ErrorCode;
 import com.arno.grow.user.web.model.BaseResult;
 import com.arno.grow.user.web.model.req.UserRegisterRequest;
 import com.arno.grow.user.web.model.resp.UserResponse;
@@ -31,10 +32,10 @@ public class UserInfoService {
     private Validator validator;
 
 
-    public String saveUser(UserRegisterRequest request) {
+    public BaseResult<Void> saveUser(UserRegisterRequest request) {
         User user = databaseUserRepository.getByNameAndPassword(request.getName(), request.getPassword());
         if (user != null) {
-            return "success.jsp";
+            return new BaseResult<>();
         }
         user = new User();
         user.setName(request.getName());
@@ -45,10 +46,11 @@ public class UserInfoService {
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (violations != null && violations.size() > 0) {
             ConstraintViolation<User> obj = new ArrayList<>(violations).get(0);
-            return obj.getPropertyPath().toString() + obj.getMessage();
+            String message = obj.getMessage();
+            return BaseResult.createFail(ErrorCode.PARAM_ERROR, message);
         }
         databaseUserRepository.saveTransaction(user);
-        return "success.jsp";
+        return new BaseResult<>();
     }
 
     public BaseResult<List<UserResponse>> getAllUser() {

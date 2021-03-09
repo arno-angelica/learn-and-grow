@@ -7,6 +7,6 @@
 	<div class="container-lg">
 		<!-- Content here -->
 		Hello,World 2021<br><br><br>
-		<a href="register-form.jsp">注册</a><br><br><br>
+		<a href="user/goRegister">注册</a><br><br><br>
 		</div>
 </body>
