@@ -18,7 +18,7 @@
 1. 结合 Apache Commons Configuration 实现多源配置读取，工具类需修改
 2. Properties#getProperty() 调用 Hashtable#get() 方法，而后者为同步方法，
    需在初始化配置文件时将Properties 转为 HashMap<Object, Object> 存储
-3. 需加入配置文件变动监听，使用都变动配置的属性也需重新注入
+3. 需加入配置文件变动监听，使用到变动配置的属性也需重新注入新值
 
 ### 启动配置说明
 
