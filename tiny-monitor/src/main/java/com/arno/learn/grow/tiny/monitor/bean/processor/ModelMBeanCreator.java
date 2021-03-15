@@ -5,7 +5,7 @@ import javax.management.modelmbean.ModelMBeanInfo;
 import javax.management.modelmbean.RequiredModelMBean;
 
 /**
- * @Author: lingquan.liu@quvideo.com
+ * @Author:
  * @Date: 2021/3/15 16:19
  * @Description:
  */
