@@ -1,5 +1,15 @@
 # learn-and-grow
 
+### 2021.03.15 重构说明
+
+1. 加入 Jolokia 和 JMX
+
+2. 新增 monitor 和 configuration
+
+   2.1 monitor 需后续填充，时间紧迫暂未处理
+
+   2.2 configuration 支持 OS 环境变量、 VM Options、 classPath/properties 读取
+
 ### 2021.03.07 重构说明
 
 1. 废弃 web-mvc 方法，新增并引入 tiny-web 工程
