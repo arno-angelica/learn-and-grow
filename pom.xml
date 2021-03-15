@@ -15,6 +15,8 @@
         <module>web-mvc</module>
         <module>user-web</module>
         <module>tiny-web</module>
+        <module>tiny-configuration</module>
+        <module>tiny-monitor</module>
     </modules>
 
     <properties>
@@ -36,6 +38,8 @@
         <javax-el.version>3.0.1-b11</javax-el.version>
         <javax-el-api.version>3.0.0</javax-el-api.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
+        <microprofile-config.version>2.0</microprofile-config.version>
+        <jolokia.version>1.5.0</jolokia.version>
 
 
         <!-- Maven Plugins 版本 -->
@@ -119,7 +123,6 @@
                 <version>${hibernate.validator.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>javax.el</groupId>
                 <artifactId>javax.el-api</artifactId>
@@ -135,6 +138,20 @@
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
                 <version>${commons-dbcp.version}</version>
+            </dependency>
+
+            <!-- eclipse microprofile -->
+            <dependency>
+                <groupId>org.eclipse.microprofile.config</groupId>
+                <artifactId>microprofile-config-api</artifactId>
+                <version>${microprofile-config.version}</version>
+            </dependency>
+
+            <!-- Jolokia -->
+            <dependency>
+                <groupId>org.jolokia</groupId>
+                <artifactId>jolokia-core</artifactId>
+                <version>${jolokia.version}</version>
             </dependency>
 
             <dependency>
