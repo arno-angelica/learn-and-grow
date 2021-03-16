@@ -1,4 +1,4 @@
-package com.arno.learn.grow.tiny.web.utils;
+package com.arno.learn.grow.tiny.core.util;
 
 import java.io.Serializable;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;

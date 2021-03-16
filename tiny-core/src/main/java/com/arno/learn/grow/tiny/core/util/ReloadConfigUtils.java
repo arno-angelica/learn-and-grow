@@ -1,7 +1,5 @@
-package com.arno.learn.grow.tiny.web.utils;
+package com.arno.learn.grow.tiny.core.util;
 
-import com.arno.learn.grow.tiny.web.exception.ServiceConfigException;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -30,13 +28,13 @@ public class ReloadConfigUtils {
             return properties;
         }
         String systemPath = System.getProperty(TINY_CONFIG_PATH);
-        if (StringUtils.isBlank(systemPath)) {
+        if (!StringUtils.hasText(systemPath)) {
             systemPath = DEFAULT_CONFIG;
         }
         // 获取配置文件
         URL url = cl.getResource(systemPath);
         if (url == null) {
-            throw new ServiceConfigException("application.properties does not exist");
+            throw new RuntimeException("application.properties does not exist");
         }
         // 读取配置文件
         try {

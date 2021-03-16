@@ -1,0 +1,11 @@
+com.arno.learn.grow.tiny.configuration.converter.StringToBigDecimalConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToBigIntConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToBooleanConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToByteConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToCharacterConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToCharsetConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToDoubleConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToFloatConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToIntegerConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToLongConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToShortConverter

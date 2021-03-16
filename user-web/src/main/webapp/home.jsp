@@ -34,6 +34,10 @@
 	<div class="container-lg">
 		<button class="btn btn-lg btn-primary btn-block" onclick="showMBean('com.arno.grow.user.web.management:type=JMXDatasourceManager')">获取UserMBean</button>
 		<button class="btn btn-lg btn-primary btn-block" onclick="showMBean('com.arno.grow.user.web.management:type=UserManager')">获取DataSourceMBean</button><br><br>
+		<label class="sr-only">请输入类型(string/integer/double/float/byte/bigDecimal/bigInteger/long/short)<label><br>
+		<input name="type" id="type" value="" type="text">
+		<button class="btn btn-lg btn-primary btn-block" onclick="getApplication()">获取ApplicationName</button><br><br>
+
 		<button class="btn btn-lg btn-primary btn-block" onclick="doget()">获取全部用户</button>
 		<button class="btn btn-lg btn-primary btn-block" onclick="doDelete()">清空全部用户</button><br>
 		<a href="goRegister">注册</a><br>
@@ -46,6 +50,21 @@
 
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
+
+	function getApplication() {
+		var value = $('#type').val();
+		$.ajax({
+			url: '/user/getApplication',
+			type: "post",
+			dataType: "json",
+			data:{"type": value},
+			contentType: "application/x-www-form-urlencoded",
+			success: function (data) {
+				$('#jsonShow').html(jsonShowFn(data));
+			}
+		});
+	}
+
 	function jsonShowFn(json) {
 		if (typeof json != 'string') {
 			json = JSON.stringify(json, undefined, 2);

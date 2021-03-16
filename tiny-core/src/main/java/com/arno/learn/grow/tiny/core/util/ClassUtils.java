@@ -1,8 +1,6 @@
-package com.arno.learn.grow.tiny.web.utils;
+package com.arno.learn.grow.tiny.core.util;
 
-import com.arno.learn.grow.tiny.web.supoort.Controller;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -49,7 +47,7 @@ public class ClassUtils {
 
     /**
      * 从源类中查询出目标类的实现类或子类
-     * @param targetClasses 指定目标类， 如 {@link Controller} 接口
+     * @param targetClasses 指定目标类
      * @param sourceClasses 源类集合
      * @return class 对象列表
      */
@@ -65,6 +63,23 @@ public class ClassUtils {
         return new ArrayList<>(assignableClazz);
     }
 
+
+
+    /**
+     * 从源类中查询出目标类的实现类或子类
+     * @param targetClasses 指定目标类
+     * @param sourceClass 源类
+     * @return class 对象列表
+     */
+    public static <T> List<Class<? extends T>> findAssignableClasses(Collection<Class<?>> targetClasses, Class<T> sourceClass) {
+        Set<Class<? extends T>> assignableClazz = new HashSet<>();
+        for (Class<?> clazz : targetClasses) {
+                if (clazz.isAssignableFrom(clazz)) {
+                    assignableClazz.add((Class<? extends T>) clazz);
+                }
+        }
+        return new ArrayList<>(assignableClazz);
+    }
     /**
      * 获取多个包内的 class 文件
      *
@@ -77,7 +92,7 @@ public class ClassUtils {
         }
         // 去重路径
         Set<String> pathSet = Stream.of(packagePaths)
-                .filter(StringUtils::isNotBlank).collect(Collectors.toSet());
+                .filter(StringUtils::hasText).collect(Collectors.toSet());
 
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         List<Class<?>> classes = new ArrayList<>();

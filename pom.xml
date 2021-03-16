@@ -17,6 +17,7 @@
         <module>tiny-web</module>
         <module>tiny-configuration</module>
         <module>tiny-monitor</module>
+        <module>tiny-core</module>
     </modules>
 
     <properties>

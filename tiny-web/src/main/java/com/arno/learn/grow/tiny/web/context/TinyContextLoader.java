@@ -6,9 +6,9 @@ import javax.servlet.ServletContext;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import static com.arno.learn.grow.tiny.core.util.ReloadConfigUtils.loadConfigFile;
 import static com.arno.learn.grow.tiny.web.context.TinyWebApplicationContext.APPLICATION_JNDI_TYPE;
 import static com.arno.learn.grow.tiny.web.context.TinyWebApplicationContext.APPLICATION_TINY_TYPE;
-import static com.arno.learn.grow.tiny.web.utils.ReloadConfigUtils.loadConfigFile;
 
 /**
  * @desc: 主要处理类

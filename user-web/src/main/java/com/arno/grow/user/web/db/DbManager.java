@@ -1,8 +1,8 @@
 package com.arno.grow.user.web.db;
 
+import com.arno.learn.grow.tiny.core.util.CustomerAQSLock;
+import com.arno.learn.grow.tiny.core.util.ReloadConfigUtils;
 import com.arno.learn.grow.tiny.web.annotation.DbRepository;
-import com.arno.learn.grow.tiny.web.utils.CustomerAQSLock;
-import com.arno.learn.grow.tiny.web.utils.ReloadConfigUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;

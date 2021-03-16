@@ -1,6 +1,7 @@
 package com.arno.grow.user.web.controller;
 
 import com.arno.grow.user.web.model.BaseResult;
+import com.arno.grow.user.web.model.req.ConverterRequest;
 import com.arno.grow.user.web.model.req.UserRegisterRequest;
 import com.arno.grow.user.web.model.resp.UserResponse;
 import com.arno.grow.user.web.service.UserInfoService;
@@ -59,6 +60,12 @@ public class UserController {
     @Path("deleteAll")
     public BaseResult<Object> deleteAll() {
         return userInfoService.deleteAll();
+    }
+
+    @POST
+    @Path("getApplication")
+    public BaseResult<Object> getApplication(ConverterRequest request) {
+        return userInfoService.getConfigValue(request);
     }
 
 }

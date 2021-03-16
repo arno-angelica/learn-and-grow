@@ -1,21 +1,27 @@
 package com.arno.grow.user.web.service;
 
+import com.arno.grow.user.web.configuration.CommonConfig;
 import com.arno.grow.user.web.constant.ErrorCode;
 import com.arno.grow.user.web.model.BaseResult;
+import com.arno.grow.user.web.model.req.ConverterRequest;
 import com.arno.grow.user.web.model.req.UserRegisterRequest;
 import com.arno.grow.user.web.model.resp.UserResponse;
 import com.arno.grow.user.web.repository.DatabaseUserRepository;
 import com.arno.grow.user.web.repository.domain.User;
+import com.arno.learn.grow.tiny.core.util.StringUtils;
 import com.arno.learn.grow.tiny.web.annotation.Autowired;
 import com.arno.learn.grow.tiny.web.annotation.Service;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.logging.Logger;
 
 /**
  * @Author: lingquan.liu@quvideo.com
@@ -25,11 +31,32 @@ import java.util.stream.Stream;
 @Service("bean/UserService")
 public class UserInfoService {
 
+    private static final Map<String, Class<?>> classTypeMap = new HashMap<>();
+    private static final String NAME = "application.name";
+
+    private Logger logger = Logger.getLogger(UserInfoService.class.getName());
+
+    static {
+        classTypeMap.put("string", String.class);
+        classTypeMap.put("integer", Integer.class);
+        classTypeMap.put("byte", Byte.class);
+        classTypeMap.put("bigdecimal", BigDecimal.class);
+        classTypeMap.put("biginteger", BigInteger.class);
+        classTypeMap.put("character", Character.class);
+        classTypeMap.put("double", Double.class);
+        classTypeMap.put("float", Float.class);
+        classTypeMap.put("long", Long.class);
+        classTypeMap.put("short", Short.class);
+    }
+
     @Autowired("bean/DatabaseUserRepository")
     private DatabaseUserRepository databaseUserRepository;
 
     @Autowired("bean/Validator")
     private Validator validator;
+
+    @Autowired
+    private CommonConfig commonConfig;
 
 
     public BaseResult<Void> saveUser(UserRegisterRequest request) {
@@ -76,6 +103,15 @@ public class UserInfoService {
         return new BaseResult<>(null);
     }
 
+    public BaseResult<Object> getConfigValue(ConverterRequest request) {
+        if (StringUtils.hasText(request.getType())) {
+            Class<?> clazz = classTypeMap.get(request.getType().toLowerCase());
+            Object config = commonConfig.getConfig().getValue(NAME + "." + request.getType().toLowerCase(), clazz);
+            logger.info("配置结果为" + config);
+            return new BaseResult<>(config);
+        }
+        return BaseResult.createFail(ErrorCode.PARAM_ERROR, "type 不能为空");
 
+    }
 
 }

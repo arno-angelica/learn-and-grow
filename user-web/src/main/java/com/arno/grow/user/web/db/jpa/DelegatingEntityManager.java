@@ -1,8 +1,8 @@
 package com.arno.grow.user.web.db.jpa;
 
 
+import com.arno.learn.grow.tiny.core.util.ReloadConfigUtils;
 import com.arno.learn.grow.tiny.web.annotation.Service;
-import com.arno.learn.grow.tiny.web.utils.ReloadConfigUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
