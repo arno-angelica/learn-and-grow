@@ -2,13 +2,19 @@
 
 ### 2021.03.15 重构说明
 
+主界面 http://localhost:8080/user/home，配置文件 config.properties
+
+多配置源的配置类 com.arno.learn.grow.tiny.configuration.JavaConfig
+
 1. 加入 Jolokia 和 JMX
 
 2. 新增 monitor 和 configuration
 
    2.1 monitor 需后续填充，时间紧迫暂未处理
 
-   2.2 configuration 支持 OS 环境变量、 VM Options、 classPath/properties 读取
+   2.2 configuration 支持 OS 环境变量、classPath/properties 读取
+
+
 
 ### 2021.03.07 重构说明
 
