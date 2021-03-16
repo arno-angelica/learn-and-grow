@@ -10,10 +10,11 @@
 
 2. 新增 monitor 和 configuration
 
-   2.1 monitor 需后续填充，时间紧迫暂未处理
+   2.1 configuration 支持 OS 环境变量、classPath/properties 读取，详见包 com.arno.learn.grow.tiny.configuration.source
 
-   2.2 configuration 支持 OS 环境变量、classPath/properties 读取
+   2.2 monitor 模块需后续填充，时间紧迫暂未处理
 
+   2.3 加入配置值类型转换 详见包 com.arno.learn.grow.tiny.configuration.converter
 
 
 ### 2021.03.07 重构说明
