@@ -10,19 +10,14 @@ import java.nio.charset.Charset;
  * @date: 2021/3/16 下午9:40
  * @version:
  */
-public class StringToCharsetConverter implements Converter<Charset> {
+public class StringToCharsetConverter extends AbstractConverter<Charset> {
     private static final long serialVersionUID = 4758129761524747799L;
 
     @Override
-    public Charset convert(String s) throws IllegalArgumentException, NullPointerException {
-        if (!StringUtils.hasText(s) || !StringUtils.hasText(s.trim())) {
+    protected Charset doConvert(String source) {
+        if (!StringUtils.hasText(source) || !StringUtils.hasText(source.trim())) {
             return null;
         }
-        return Charset.forName(s);
-    }
-
-    @Override
-    public String covertType() {
-        return Charset.class.getSimpleName();
+        return Charset.forName(source);
     }
 }

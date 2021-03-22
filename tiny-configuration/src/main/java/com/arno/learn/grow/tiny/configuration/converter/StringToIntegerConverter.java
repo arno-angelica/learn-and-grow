@@ -8,16 +8,11 @@ import static com.arno.learn.grow.tiny.core.util.StringUtils.isHexNumber;
  * @date: 2021/3/16 下午10:21
  * @version:
  */
-public class StringToIntegerConverter implements Converter<Integer> {
+public class StringToIntegerConverter extends AbstractConverter<Integer> {
     private static final long serialVersionUID = -2291709268948519532L;
 
     @Override
-    public Integer convert(String source) throws IllegalArgumentException, NullPointerException {
+    protected Integer doConvert(String source) {
         return isHexNumber(source) ? Integer.decode(source) : Integer.valueOf(source);
-    }
-
-    @Override
-    public String covertType() {
-        return Integer.class.getSimpleName();
     }
 }

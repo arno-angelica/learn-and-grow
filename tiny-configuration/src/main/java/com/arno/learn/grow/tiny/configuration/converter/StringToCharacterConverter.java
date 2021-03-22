@@ -8,19 +8,14 @@ import com.arno.learn.grow.tiny.core.util.StringUtils;
  * @date: 2021/3/16 下午9:39
  * @version:
  */
-public class StringToCharacterConverter implements Converter<Character> {
+public class StringToCharacterConverter extends AbstractConverter<Character> {
     private static final long serialVersionUID = 8937748933085742097L;
 
     @Override
-    public Character convert(String s) throws IllegalArgumentException, NullPointerException {
-        if (!StringUtils.hasText(s) || !StringUtils.hasText(s.trim())) {
+    protected Character doConvert(String source) {
+        if (!StringUtils.hasText(source) || !StringUtils.hasText(source.trim())) {
             return null;
         }
-        return s.charAt(0);
-    }
-
-    @Override
-    public String covertType() {
-        return Character.class.getSimpleName();
+        return source.charAt(0);
     }
 }

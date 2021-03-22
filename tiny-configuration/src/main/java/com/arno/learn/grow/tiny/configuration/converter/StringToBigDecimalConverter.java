@@ -8,16 +8,12 @@ import java.math.BigDecimal;
  * @date: 2021/3/16 下午10:27
  * @version:
  */
-public class StringToBigDecimalConverter implements Converter<BigDecimal> {
+public class StringToBigDecimalConverter extends AbstractConverter<BigDecimal> {
     private static final long serialVersionUID = -5867837033088300951L;
 
     @Override
-    public BigDecimal convert(String source) throws IllegalArgumentException, NullPointerException {
-        return new BigDecimal(source);
+    protected BigDecimal doConvert(String value) {
+        return new BigDecimal(value);
     }
 
-    @Override
-    public String covertType() {
-        return BigDecimal.class.getSimpleName();
-    }
 }
