@@ -10,12 +10,12 @@ import com.arno.learn.grow.tiny.web.exception.ServiceConfigException;
 import com.arno.learn.grow.tiny.web.supoort.Controller;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.ServletContext;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,8 +40,8 @@ public class TinyDefaultInitializeWebApplicationContext extends TinyAbstractInit
         scanAnnotationSet.add(WebController.class);
     }
 
-    public TinyDefaultInitializeWebApplicationContext(Properties properties) {
-        super.createWebApplicationContext(properties);
+    public TinyDefaultInitializeWebApplicationContext(ServletContext servletContext) {
+        super.createWebApplicationContext(servletContext);
     }
 
     /**
@@ -49,7 +49,7 @@ public class TinyDefaultInitializeWebApplicationContext extends TinyAbstractInit
      */
     @Override
     protected void loadComponents() {
-        String scanPath = properties.getProperty(SCAN_PACKAGE_KEY);
+        String scanPath = this.config.getValue(SCAN_PACKAGE_KEY, String.class);
         if (StringUtils.isBlank(scanPath)) {
             throw new ServiceConfigException("can not find scan.package in properties");
         }

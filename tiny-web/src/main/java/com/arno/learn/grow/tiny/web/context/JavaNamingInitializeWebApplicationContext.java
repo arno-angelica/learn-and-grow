@@ -8,10 +8,10 @@ import javax.naming.NameClassPair;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @desc:
@@ -25,12 +25,10 @@ public class JavaNamingInitializeWebApplicationContext extends TinyAbstractIniti
     private Context envContext; // Component Env Context
 
     private final ClassLoader classLoader;
-
-
-    public JavaNamingInitializeWebApplicationContext(ServletContext servletContext, Properties properties) {
+    public JavaNamingInitializeWebApplicationContext(ServletContext servletContext) {
         this.classLoader = servletContext.getClassLoader();
         initEnvContext();
-        super.createWebApplicationContext(properties);
+        super.createWebApplicationContext(servletContext);
     }
 
     @Override

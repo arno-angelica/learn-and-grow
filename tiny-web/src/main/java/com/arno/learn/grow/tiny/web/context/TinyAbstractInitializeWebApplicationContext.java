@@ -11,10 +11,13 @@ import com.arno.learn.grow.tiny.web.supoort.ContextBeanInfoBuilder;
 import com.arno.learn.grow.tiny.web.supoort.Controller;
 import com.arno.learn.grow.tiny.web.supoort.SupportMethodInfo;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.spi.ConfigProviderResolver;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
 import java.lang.annotation.Annotation;
@@ -27,7 +30,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -44,7 +46,7 @@ public abstract class TinyAbstractInitializeWebApplicationContext implements Tin
     protected static final Logger logger = Logger.getLogger(TinyAbstractInitializeWebApplicationContext.class.getName());
 
     private static final String PATTERN = "@";
-    protected Properties properties;
+    protected Config config;
 
     /**
      * 存储请求路径和方法
@@ -74,8 +76,12 @@ public abstract class TinyAbstractInitializeWebApplicationContext implements Tin
     /**
      * 初始化上下文
      */
-    protected void createWebApplicationContext(Properties properties) {
-        this.properties = properties;
+    protected void createWebApplicationContext(ServletContext servletContext) {
+        // 读取配置源，存储到 map 中
+        ConfigProviderResolver configProviderResolver = (ConfigProviderResolver) servletContext.getAttribute(CONFIG_ATTRIBUTE);
+        this.config = configProviderResolver.getConfig(servletContext.getClassLoader());
+        contextBeanInfoMap.put(CONFIG_ATTRIBUTE, ContextBeanInfoBuilder.builder().instance(config).build());
+
         // 加载组件列表
         loadComponents();
         if (beanClassesMap == null || beanClassesMap.isEmpty()) {
@@ -148,40 +154,40 @@ public abstract class TinyAbstractInitializeWebApplicationContext implements Tin
      * 注入实例对象
      */
     private void injectComponent() {
-        contextBeanInfoMap.values().forEach(beanInfo -> {
-            Stream.of(beanInfo.getInstance().getClass().getDeclaredFields())
-                    .filter(field -> {
-                        // 取出非静态且需要注入的的字段
-                        int mods = field.getModifiers();
-                        return !Modifier.isStatic(mods)
-                                && (field.isAnnotationPresent(Autowired.class)
-                                || field.isAnnotationPresent(Resource.class)
-                                || field.isAnnotationPresent(Value.class));
-                    }).forEach(field -> {
-                        Object obj;
-                if (field.isAnnotationPresent(Autowired.class)
-                        || field.isAnnotationPresent(Resource.class)) {
-                    obj = getAutowiredFiled(field);
-                } else {
-                    Value value = field.getAnnotation(Value.class);
-                    String val = value.value();
-                    obj = val;
-                    if (StringUtils.isNotBlank(val) && val.startsWith(PATTERN)) {
-                        obj = properties.get(val.substring(1));
-                    }
+        contextBeanInfoMap.values().forEach(beanInfo -> Stream.of(beanInfo.getInstance()
+                .getClass().getDeclaredFields())
+                .filter(field -> {
+                    // 取出非静态且需要注入的的字段
+                    int mods = field.getModifiers();
+                    return !Modifier.isStatic(mods)
+                            && (field.isAnnotationPresent(Autowired.class)
+                            || field.isAnnotationPresent(Resource.class)
+                            || field.isAnnotationPresent(Value.class));
+                }).forEach(field -> {
+            Object obj;
+            if (field.isAnnotationPresent(Autowired.class)
+                    || field.isAnnotationPresent(Resource.class)) {
+                obj = getAutowiredFiled(field);
+            } else {
+                Value value = field.getAnnotation(Value.class);
+                String val = value.value();
+                obj = val;
+                if (StringUtils.isNotBlank(val) && val.startsWith(PATTERN)) {
+                    obj = config.getValue(val.substring(1), String.class);
                 }
-                field.setAccessible(true);
-                try {
-                    field.set(beanInfo.getInstance(), obj);
-                } catch (Exception e) {
-                    throw new RuntimeException("autowired " + field.getName() + " bean info error : " + e.getMessage());
-                }
-            });
-        });
+            }
+            field.setAccessible(true);
+            try {
+                field.set(beanInfo.getInstance(), obj);
+            } catch (Exception e) {
+                throw new RuntimeException("autowired " + field.getName() + " bean info error : " + e.getMessage());
+            }
+        }));
     }
 
     /**
      * 获取注入属性
+     *
      * @param field
      * @return
      */
@@ -198,7 +204,15 @@ public abstract class TinyAbstractInitializeWebApplicationContext implements Tin
         // 从 map 中获取实例对象
         ContextBeanInfo info = contextBeanInfoMap.get(autowiredName);
         if (info == null) {
-            throw new NoSuchElementException("can not find named " + autowiredName + " bean info");
+            for (ContextBeanInfo beanInfo : contextBeanInfoMap.values()) {
+                if (field.getType().isAssignableFrom(beanInfo.getInstance().getClass())) {
+                    info = beanInfo;
+                    break;
+                }
+            }
+            if (info == null) {
+                throw new NoSuchElementException("can not find named " + autowiredName + " bean info");
+            }
         }
         return info.getInstance();
     }

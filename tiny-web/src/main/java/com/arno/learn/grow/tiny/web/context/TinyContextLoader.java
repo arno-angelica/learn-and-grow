@@ -3,10 +3,8 @@ package com.arno.learn.grow.tiny.web.context;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.ServletContext;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import static com.arno.learn.grow.tiny.core.util.ReloadConfigUtils.loadConfigFile;
 import static com.arno.learn.grow.tiny.web.context.TinyWebApplicationContext.APPLICATION_JNDI_TYPE;
 import static com.arno.learn.grow.tiny.web.context.TinyWebApplicationContext.APPLICATION_TINY_TYPE;
 
@@ -35,21 +33,21 @@ public class TinyContextLoader {
         }
         long startTime = System.currentTimeMillis();
         // 读取配置文件信息
-        Properties defaultProperties = loadConfigFile(servletContext.getClassLoader());
-        String applicationContextType = defaultProperties.getProperty(APPLICATION_CONTEXT_TYPE);
+        String applicationContextType = servletContext.getInitParameter(APPLICATION_CONTEXT_TYPE);
         if (StringUtils.isBlank(applicationContextType)) {
             applicationContextType = APPLICATION_TINY_TYPE;
         }
         // 创建 applicationContext
         if (APPLICATION_JNDI_TYPE.equalsIgnoreCase(applicationContextType)) {
-            context = new JavaNamingInitializeWebApplicationContext(servletContext, defaultProperties);
+            context = new JavaNamingInitializeWebApplicationContext(servletContext);
         } else {
-            context = createTinyWebApplicationContext(defaultProperties, servletContext);
+            context = createTinyWebApplicationContext(servletContext);
         }
         // 写入 servlet Context 上下文中
         servletContext.setAttribute(TinyWebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_NAME, context);
         long elapsedTime = System.currentTimeMillis() - startTime;
         logger.info("Tiny WebApplicationContext initialized in " + elapsedTime + " ms");
+        shutdownHook();
         return context;
     }
 
@@ -61,14 +59,18 @@ public class TinyContextLoader {
         context.destroyWebApplication();
     }
 
+    public void shutdownHook() {
+        if (context == null) return;
+        Runtime.getRuntime().addShutdownHook(new Thread(()-> context.destroyWebApplication()));
+    }
+
     /**
      * 默认 tiny 实现
-     * @param defaultProperties
      * @param servletContext
      * @return
      */
-    protected TinyWebApplicationContext createTinyWebApplicationContext(Properties defaultProperties, ServletContext servletContext) {
-        return new TinyDefaultInitializeWebApplicationContext(defaultProperties);
+    protected TinyWebApplicationContext createTinyWebApplicationContext(ServletContext servletContext) {
+        return new TinyDefaultInitializeWebApplicationContext(servletContext);
     }
 
 }

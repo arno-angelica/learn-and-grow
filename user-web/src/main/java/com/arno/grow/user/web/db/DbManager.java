@@ -1,9 +1,10 @@
 package com.arno.grow.user.web.db;
 
 import com.arno.learn.grow.tiny.core.util.CustomerAQSLock;
-import com.arno.learn.grow.tiny.core.util.ReloadConfigUtils;
+import com.arno.learn.grow.tiny.web.annotation.Autowired;
 import com.arno.learn.grow.tiny.web.annotation.DbRepository;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.microprofile.config.Config;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -13,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 /**
  * @desc:
@@ -24,35 +24,36 @@ import java.util.Properties;
 @DbRepository("bean/DbManager")
 public class DbManager {
 
-    private static final String CONFIG_FILE = "application.properties";
     private static final String JDBC_DRIVER = "jdbc.driver";
     private static final String JDBC_URL = "jdbc.url";
     private static final String TABLE_NAME = "table.name";
     private static final String CREATE_SQL = "create.table.sql";
     private static final CustomerAQSLock customerAQSLock;
     private Connection connection;
-
+    
     static {
         customerAQSLock = new CustomerAQSLock();
     }
 
+    @Autowired
+    private Config config;
+
     @PostConstruct
     public void init() {
         // 读取配置文件
-        Properties defaultProperties = ReloadConfigUtils.loadConfigFile(Thread.currentThread().getContextClassLoader());
-        initFiled(defaultProperties);
+        initFiled();
     }
 
-    public void initFiled(Properties defaultProperties) {
+    public void initFiled() {
         try {
-            String driver = defaultProperties.getProperty(JDBC_DRIVER);
-            String url = defaultProperties.getProperty(JDBC_URL);
+            String driver = config.getValue(JDBC_DRIVER, String.class);
+            String url = config.getValue(JDBC_URL, String.class);
             Class.forName(driver);
             this.connection = DriverManager
                     .getConnection(url);
 
-            String tableName = defaultProperties.getProperty(TABLE_NAME);
-            String createSql = defaultProperties.getProperty(CREATE_SQL);
+            String tableName = config.getValue(TABLE_NAME, String.class);
+            String createSql = config.getValue(CREATE_SQL, String.class);
             if (StringUtils.isNotBlank(tableName) && StringUtils.isNotBlank(createSql)
                     && !tableHasBeenInitialized(connection, tableName)) {
                 initTable(createSql);

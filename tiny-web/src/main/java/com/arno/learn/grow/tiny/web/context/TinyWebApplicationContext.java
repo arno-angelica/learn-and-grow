@@ -21,8 +21,11 @@ public interface TinyWebApplicationContext {
 
     String APPLICATION_JNDI_TYPE = "jndi";
 
+    String CONFIG_ATTRIBUTE = "configResolver";
 
     void destroyWebApplication();
 
     SupportMethodInfo getSupportMethod(String requestPath);
+
+
 }

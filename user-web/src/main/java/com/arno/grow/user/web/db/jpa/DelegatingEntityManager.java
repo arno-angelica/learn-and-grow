@@ -1,8 +1,9 @@
 package com.arno.grow.user.web.db.jpa;
 
 
-import com.arno.learn.grow.tiny.core.util.ReloadConfigUtils;
+import com.arno.learn.grow.tiny.web.annotation.Autowired;
 import com.arno.learn.grow.tiny.web.annotation.Service;
+import org.eclipse.microprofile.config.Config;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -21,9 +22,9 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.Metamodel;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * 委派实现（静态 AOP 实现）
@@ -32,28 +33,33 @@ import java.util.Properties;
 public class DelegatingEntityManager implements EntityManager {
 
     private static final String PER_UNIT_NAME = "persistence.unit.name";
+    private static final String PER_UNIT_MAPPING = "hibernate.id.new_generator_mappings";
+    private static final String PER_UNIT_DIALECT = "hibernate.dialect";
 
     private String persistenceUnitName;
-
-    private String propertiesLocation;
 
     private EntityManager entityManager;
 
     @Resource(name = "bean/MyDataSourceManager")
     private MyDataSourceManager myDataSourceManager;
 
+    @Autowired
+    private Config config;
+
     @PostConstruct
     public void init() {
-        Map<Object, Object> defaultProperties = loadProperties();
+        Map<String, Object> defaultProperties = loadProperties();
         EntityManagerFactory entityManagerFactory =
                 Persistence.createEntityManagerFactory(persistenceUnitName, defaultProperties);
         this.entityManager = entityManagerFactory.createEntityManager();
     }
 
-    private Map<Object, Object> loadProperties() {
-        Properties defaultProperties = ReloadConfigUtils.loadConfigFile(Thread.currentThread().getContextClassLoader());
+    private Map<String, Object> loadProperties() {
+        Map<String, Object> defaultProperties = new HashMap<>();
+        this.persistenceUnitName = config.getValue(PER_UNIT_NAME, String.class);
         defaultProperties.put("hibernate.connection.datasource", myDataSourceManager.getDataSource());
-        this.persistenceUnitName = defaultProperties.getProperty(PER_UNIT_NAME);
+        defaultProperties.put(PER_UNIT_MAPPING, config.getValue(PER_UNIT_MAPPING, Boolean.class));
+        defaultProperties.put(PER_UNIT_DIALECT, config.getValue(PER_UNIT_DIALECT, String.class));
         return defaultProperties;
     }
 

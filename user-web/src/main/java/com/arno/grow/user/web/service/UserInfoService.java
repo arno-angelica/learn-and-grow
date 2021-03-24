@@ -1,6 +1,5 @@
 package com.arno.grow.user.web.service;
 
-import com.arno.grow.user.web.configuration.CommonConfig;
 import com.arno.grow.user.web.constant.ErrorCode;
 import com.arno.grow.user.web.model.BaseResult;
 import com.arno.grow.user.web.model.req.ConverterRequest;
@@ -11,6 +10,7 @@ import com.arno.grow.user.web.repository.domain.User;
 import com.arno.learn.grow.tiny.core.util.StringUtils;
 import com.arno.learn.grow.tiny.web.annotation.Autowired;
 import com.arno.learn.grow.tiny.web.annotation.Service;
+import org.eclipse.microprofile.config.Config;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -56,7 +56,7 @@ public class UserInfoService {
     private Validator validator;
 
     @Autowired
-    private CommonConfig commonConfig;
+    private Config config;
 
 
     public BaseResult<Void> saveUser(UserRegisterRequest request) {
@@ -106,7 +106,7 @@ public class UserInfoService {
     public BaseResult<Object> getConfigValue(ConverterRequest request) {
         if (StringUtils.hasText(request.getType())) {
             Class<?> clazz = classTypeMap.get(request.getType().toLowerCase());
-            Object config = commonConfig.getConfig().getValue(NAME + "." + request.getType().toLowerCase(), clazz);
+            Object config = this.config.getValue(NAME + "." + request.getType().toLowerCase(), clazz);
             logger.info("配置结果为" + config);
             return new BaseResult<>(config);
         }

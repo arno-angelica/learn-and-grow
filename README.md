@@ -4,7 +4,7 @@
 
 主界面 http://localhost:8080/user/home，配置文件 config.properties
 
-多配置源的配置类 com.arno.learn.grow.tiny.configuration.JavaConfig
+多配置源的配置类 com.arno.learn.grow.tiny.configuration.DefaultConfig
 
 1. 加入 Jolokia 和 JMX
 

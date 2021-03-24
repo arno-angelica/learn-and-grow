@@ -5,9 +5,9 @@
          http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          metadata-complete="true" version="2.5">
 
-    <listener>
-        <listener-class>com.arno.learn.grow.tiny.web.context.TinyContextLoaderListener</listener-class>
-    </listener>
+<!--    <listener>-->
+<!--        <listener-class>com.arno.learn.grow.tiny.web.context.TinyContextLoaderListener</listener-class>-->
+<!--    </listener>-->
     <servlet>
         <servlet-name>TinyWebDefaultHttpServlet</servlet-name>
         <servlet-class>com.arno.learn.grow.tiny.web.servlet.TinyWebDefaultHttpServlet</servlet-class>
@@ -50,6 +50,10 @@
         <welcome-file>/index</welcome-file>
         <welcome-file>/index.jsp</welcome-file>
     </welcome-file-list>
+    <context-param>
+        <param-name>servletContext.application.name</param-name>
+        <param-value>servletContext</param-value>
+    </context-param>
 
 <!--    <resource-ref>-->
 <!--        <description>DB Connection</description>-->

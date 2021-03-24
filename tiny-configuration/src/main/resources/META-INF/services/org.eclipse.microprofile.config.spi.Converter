@@ -9,3 +9,4 @@ com.arno.learn.grow.tiny.configuration.converter.StringToFloatConverter
 com.arno.learn.grow.tiny.configuration.converter.StringToIntegerConverter
 com.arno.learn.grow.tiny.configuration.converter.StringToLongConverter
 com.arno.learn.grow.tiny.configuration.converter.StringToShortConverter
+com.arno.learn.grow.tiny.configuration.converter.StringToDefaultConverter
