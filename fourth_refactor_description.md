@@ -8,7 +8,7 @@
 
 ## 问题
 
-- ServletContextParamConfig 创建时如果直接实现父类（MapBasedConfigSource）之前的构造器会导致servletContext为空
+- ServletContextParamConfig 创建时如果直接实现父类（MapBasedConfigSource）之前的构造器会导致 servletContext 为空
 
   ```java
   // 之前默认的构造器
