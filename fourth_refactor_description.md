@@ -1,5 +1,7 @@
 # 2021.03.24 重构说明
 
+## 改动点
+
 1. 调整 [**tiny-configuration**](https://github.com/arno-angelica/learn-and-grow/tree/fourth_refactor/tiny-configuration) 模块代码
 2. 加入 [**servletContext param**](https://github.com/arno-angelica/learn-and-grow/blob/fourth_refactor/user-web/src/main/java/com/arno/grow/user/web/configuration/ServletContextParamConfig.java) 的配置读取方式
 3. 新增 [**ServletContainerInitializer 实现**](https://github.com/arno-angelica/learn-and-grow/blob/fourth_refactor/tiny-web/src/main/java/com/arno/learn/grow/tiny/web/servlet/ServletInitializer.java)
