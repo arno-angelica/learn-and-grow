@@ -8,7 +8,27 @@
 
 ## 问题
 
-- com.arno.grow.user.web.configuration.ServletContextParamConfig 创建时如果直接实现父类（MapBasedConfigSource）之前的构造器会导致servletContext为空
+- ServletContextParamConfig 创建时如果直接实现父类（MapBasedConfigSource）之前的构造器会导致servletContext为空
+
+  ```java
+  // 之前默认的构造器
+  protected MapBasedConfigSource(String name, int ordinal) {
+    this.name = name;
+    this.ordinal = ordinal;
+    this.source = getProperties();
+  }
+  // 新增如下
+  protected ServletContext servletContext;
+  // 默认无参构造器
+  protected MapBasedConfigSource() {}
+  // 带servletContext 的构造器
+  protected MapBasedConfigSource(String name, int ordinal, ServletContext servletContext) {
+    this.name = name;
+    this.ordinal = ordinal;
+    this.servletContext = servletContext;
+    this.source = getProperties();
+  }
+  ```
 
   - MapBasedConfigSource 中新增构造器和 servletContext 属性，子类创建时将 servletContext 交给父类托管，后续子类直接使用。
   - 需注意子类创建有参构造器后，需再创建一个无参构造器，用于 class.instance 
