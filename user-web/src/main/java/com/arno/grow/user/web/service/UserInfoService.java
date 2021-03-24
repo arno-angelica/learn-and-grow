@@ -4,6 +4,7 @@ import com.arno.grow.user.web.constant.ErrorCode;
 import com.arno.grow.user.web.model.BaseResult;
 import com.arno.grow.user.web.model.req.ConverterRequest;
 import com.arno.grow.user.web.model.req.UserRegisterRequest;
+import com.arno.grow.user.web.model.resp.ConverterResponse;
 import com.arno.grow.user.web.model.resp.UserResponse;
 import com.arno.grow.user.web.repository.DatabaseUserRepository;
 import com.arno.grow.user.web.repository.domain.User;
@@ -103,12 +104,26 @@ public class UserInfoService {
         return new BaseResult<>(null);
     }
 
-    public BaseResult<Object> getConfigValue(ConverterRequest request) {
+    public BaseResult<List<ConverterResponse>> getConfigValue(ConverterRequest request) {
         if (StringUtils.hasText(request.getType())) {
+
             Class<?> clazz = classTypeMap.get(request.getType().toLowerCase());
-            Object config = this.config.getValue(NAME + "." + request.getType().toLowerCase(), clazz);
-            logger.info("配置结果为" + config);
-            return new BaseResult<>(config);
+            Object value = this.config.getValue(NAME + "." + request.getType().toLowerCase(), clazz);
+            logger.info("配置结果为" + value);
+            ConverterResponse resp = new ConverterResponse();
+            resp.setKey(NAME);
+            resp.setValue(value);
+
+            Object application = this.config.getValue("servletContext.application.name", String.class);
+            logger.info("servletContext.application.name" + application);
+            ConverterResponse respServlet = new ConverterResponse();
+            respServlet.setKey("context-param servletContext.application.name");
+            respServlet.setValue(application);
+
+            List<ConverterResponse> configs = new ArrayList<>();
+            configs.add(resp);
+            configs.add(respServlet);
+            return new BaseResult<>(configs);
         }
         return BaseResult.createFail(ErrorCode.PARAM_ERROR, "type 不能为空");
 

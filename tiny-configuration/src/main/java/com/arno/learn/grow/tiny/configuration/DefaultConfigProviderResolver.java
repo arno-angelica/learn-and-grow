@@ -22,6 +22,20 @@ public class DefaultConfigProviderResolver extends ConfigProviderResolver {
         return getConfig(null);
     }
 
+    public static DefaultConfigProviderResolver instance() {
+       return (DefaultConfigProviderResolver) ConfigProviderResolver.instance();
+    }
+
+    public DefaultConfigProviderResolver() {}
+
+    public DefaultConfigProviderResolver(DefaultConfigProviderResolver resolver) {
+        this.configsRepository = resolver.configsRepository;
+    }
+
+    public ConfigProviderResolver cloneConfigProviderResolver() {
+        return new DefaultConfigProviderResolver(this);
+    }
+
     @Override
     public Config getConfig(ClassLoader loader) {
         return configsRepository.computeIfAbsent(loader, this::newConfig);

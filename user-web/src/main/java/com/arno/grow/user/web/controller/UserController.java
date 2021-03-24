@@ -3,6 +3,7 @@ package com.arno.grow.user.web.controller;
 import com.arno.grow.user.web.model.BaseResult;
 import com.arno.grow.user.web.model.req.ConverterRequest;
 import com.arno.grow.user.web.model.req.UserRegisterRequest;
+import com.arno.grow.user.web.model.resp.ConverterResponse;
 import com.arno.grow.user.web.model.resp.UserResponse;
 import com.arno.grow.user.web.service.UserInfoService;
 import com.arno.learn.grow.tiny.web.annotation.Autowired;
@@ -64,7 +65,7 @@ public class UserController {
 
     @POST
     @Path("getApplication")
-    public BaseResult<Object> getApplication(ConverterRequest request) {
+    public BaseResult<List<ConverterResponse>> getApplication(ConverterRequest request) {
         return userInfoService.getConfigValue(request);
     }
 

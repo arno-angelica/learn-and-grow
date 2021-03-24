@@ -1,5 +1,6 @@
 package com.arno.learn.grow.tiny.web.context;
 
+import com.arno.learn.grow.tiny.configuration.DefaultConfigProviderResolver;
 import com.arno.learn.grow.tiny.web.annotation.Autowired;
 import com.arno.learn.grow.tiny.web.annotation.Value;
 import com.arno.learn.grow.tiny.web.annotation.WebController;
@@ -12,7 +13,6 @@ import com.arno.learn.grow.tiny.web.supoort.Controller;
 import com.arno.learn.grow.tiny.web.supoort.SupportMethodInfo;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.microprofile.config.Config;
-import org.eclipse.microprofile.config.spi.ConfigProviderResolver;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -78,7 +78,7 @@ public abstract class TinyAbstractInitializeWebApplicationContext implements Tin
      */
     protected void createWebApplicationContext(ServletContext servletContext) {
         // 读取配置源，存储到 map 中
-        ConfigProviderResolver configProviderResolver = (ConfigProviderResolver) servletContext.getAttribute(CONFIG_ATTRIBUTE);
+        DefaultConfigProviderResolver configProviderResolver = (DefaultConfigProviderResolver) servletContext.getAttribute(CONFIG_ATTRIBUTE);
         this.config = configProviderResolver.getConfig(servletContext.getClassLoader());
         contextBeanInfoMap.put(CONFIG_ATTRIBUTE, ContextBeanInfoBuilder.builder().instance(config).build());
 
