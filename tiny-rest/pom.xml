@@ -9,22 +9,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tiny-configuration</artifactId>
-    <name>tiny-configuration</name>
+    <artifactId>tiny-rest</artifactId>
+    <name>tiny-rest</name>
     <packaging>jar</packaging>
 
-    <dependencies>
 
-        <dependency>
-            <groupId>com.arno.grow</groupId>
-            <artifactId>tiny-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.microprofile.config</groupId>
-            <artifactId>microprofile-config-api</artifactId>
-        </dependency>
-        
-    </dependencies>
 </project>

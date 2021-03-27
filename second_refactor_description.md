@@ -1,5 +1,17 @@
 # 2021.03.07 重构说明
 
+### 内容简介
+
+1. JNDI 的方式说明
+   1.1 并非从 Context 中 lookup 查找对象，因此 user-web/src/main/webapp/META-INF/context.xml 配置的属性无法通过 setter 注入
+
+   1.2 参数注入方式可参考 com.arno.grow.user.web.db.jpa.MyDataSourceManager
+2. application.properties中的 application.context.type 用于切换 JNDI 和 自研 tiny 依赖注入方式, 未配置该参数时默认自研 tiny
+3. application.properties中的 scan.package 用于指定扫描哪些包下的 class 文件，无指定时将不做注入，功能会出问题。
+4. 实现入口见 com.arno.learn.grow.tiny.web.context.TinyContextLoaderListener
+
+### 其他说明
+
 1. 废弃 web-mvc 方法，新增并引入 tiny-web 工程
 2. 剥离原 web-mvc Servlet#init() 加载方法，提取到 Listener init 中处理
 3. 提供统一 API(com.arno.learn.grow.tiny.web.context.TinyWebApplicationContext),

@@ -9,9 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tiny-monitor</artifactId>
-    <name>tiny-monitor</name>
+    <artifactId>tiny-message</artifactId>
+    <name>tiny-message</name>
     <packaging>jar</packaging>
+
 
 
 </project>

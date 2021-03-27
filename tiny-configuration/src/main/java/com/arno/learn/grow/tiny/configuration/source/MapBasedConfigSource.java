@@ -2,7 +2,6 @@ package com.arno.learn.grow.tiny.configuration.source;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
-import javax.servlet.ServletContext;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,20 +18,22 @@ public abstract class MapBasedConfigSource implements ConfigSource {
 
     private Map<String, String> source;
 
-    protected ServletContext servletContext;
+    private boolean lazy = false;
 
     protected MapBasedConfigSource() {}
-    protected MapBasedConfigSource(String name, int ordinal, ServletContext servletContext) {
-        this.name = name;
-        this.ordinal = ordinal;
-        this.servletContext = servletContext;
-        this.source = getProperties();
-    }
+
 
     protected MapBasedConfigSource(String name, int ordinal) {
+        this(name, ordinal, false);
+    }
+
+    protected MapBasedConfigSource(String name, int ordinal, boolean lazy) {
         this.name = name;
         this.ordinal = ordinal;
-        this.source = getProperties();
+        this.lazy = lazy;
+        if (!lazy) {
+            this.source = getProperties();
+        }
     }
 
     /**
@@ -77,4 +78,9 @@ public abstract class MapBasedConfigSource implements ConfigSource {
         return source.get(propertyName);
     }
 
+    protected void setSource() {
+        if (lazy) {
+            this.source = getProperties();
+        }
+    }
 }

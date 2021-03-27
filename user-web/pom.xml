@@ -15,10 +15,11 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <!-- tiny web -->
         <dependency>
             <groupId>com.arno.grow</groupId>
             <artifactId>tiny-web</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- Servlet API -->
@@ -33,14 +34,6 @@
             <artifactId>jstl</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-        </dependency>
         <!-- Hibernate ORM Core -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -74,19 +67,26 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
         </dependency>
+
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+
         <!-- jolokia -->
         <dependency>
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.arno.grow</groupId>
-            <artifactId>tiny-configuration</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
         </dependency>
     </dependencies>
     <build>

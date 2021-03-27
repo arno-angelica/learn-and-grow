@@ -115,7 +115,7 @@ public class UserInfoService {
             resp.setValue(value);
 
             Object application = this.config.getValue("servletContext.application.name", String.class);
-            logger.info("servletContext.application.name" + application);
+            logger.info("servletContext.application.name is " + application);
             ConverterResponse respServlet = new ConverterResponse();
             respServlet.setKey("context-param servletContext.application.name");
             respServlet.setValue(application);
