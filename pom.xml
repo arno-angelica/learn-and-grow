@@ -16,7 +16,7 @@
         <module>tiny-configuration</module>
         <module>tiny-core</module>
         <module>tiny-rest</module>
-        <module>tiny-message</module>
+        <module>tiny-stream</module>
 
         <!-- 使用 demo -->
         <module>user-web</module>

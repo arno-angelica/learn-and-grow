@@ -9,8 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tiny-message</artifactId>
-    <name>tiny-message</name>
+    <artifactId>tiny-stream</artifactId>
+    <name>tiny-stream</name>
     <packaging>jar</packaging>
 
     <dependencies>

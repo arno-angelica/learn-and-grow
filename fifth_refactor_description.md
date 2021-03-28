@@ -41,7 +41,7 @@
 
   - 打包成功后， 启动 user-web 项目，命令 `java -jar user-web/target/user-web-1.0.0-SNAPSHOT-war-exec.jar `
 
-    - 启动时可能会报以下错误，原因是 pom 中引用了 tomcat 8的插件，而其中有些jar中增加了jdk9特性Module, 此错误不影响程序启动，可忽略，后续修复
+    - 启动时可能会报以下错误，原因是 pom 中引用了 tomcat 8的插件，而其中有些jar中增加了jdk9特性Module, 此错误不影响程序启动，可忽略
 
       ```java
       org.apache.tomcat.util.bcel.classfile.ClassFormatException: Invalid byte tag in constant pool: 19

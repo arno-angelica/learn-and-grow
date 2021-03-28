@@ -1,4 +1,4 @@
-package com.arno.learn.grow.tiny.message;
+package com.arno.learn.grow.tiny.stream;
 
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
