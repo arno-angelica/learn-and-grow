@@ -18,6 +18,12 @@
 
 ### **作业一：继续完善 POST 方法** 
 
+#### 链路说明
+
+![调用链路](../../../doc/learn-doc/image/javax.ws.rs.client 链路.png)
+
+#### 作业内容
+
 - 提取抽象类 [**AbstractInvocation**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/main/java/com/arno/learn/grow/tiny/rest/clinet/AbstractInvocation.java)
 
 - [**HttpGetInvocation**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/main/java/com/arno/learn/grow/tiny/rest/clinet/HttpGetInvocation.java) 和 [**HttpPostInvocation**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/main/java/com/arno/learn/grow/tiny/rest/clinet/HttpGetInvocation.java) 继承 `AbstractInvocation`
