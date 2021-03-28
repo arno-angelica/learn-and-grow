@@ -25,11 +25,11 @@ import static com.arno.learn.grow.tiny.rest.util.URLUtils.DEFAULT_ENCODING;
  */
 public abstract class AbstractInvocation implements Invocation {
 
-    private URL url;
+    private final URL url;
 
-    private MultivaluedMap<String, Object> headers;
+    private final MultivaluedMap<String, Object> headers;
 
-    private String httpMethod;
+    private final String httpMethod;
 
     protected String encoding = DEFAULT_ENCODING;
 

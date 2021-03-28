@@ -35,17 +35,6 @@ public class HttpPostInvocation extends AbstractInvocation {
         }
     }
 
-    public HttpPostInvocation(URI uri, MultivaluedMap<String, Object> headers, Entity<?> entity, String encoding) {
-        super(uri, headers, HttpMethod.POST, encoding);
-        this.entity = entity;
-        MediaType type = entity.getMediaType();
-        if (type == null || StringUtils.isBlank(type.getType())) {
-            this.contentType = DEFAULT_CONTENT_TYPE + "; " + encoding;
-        } else {
-            this.contentType = String.format(CONTENT_TYPE, type.getType(), type.getSubtype(), encoding);
-        }
-    }
-
     @Override
     protected void prepareConnection(HttpURLConnection connection) throws Throwable {
         connection.setRequestProperty("Content-Type", contentType);
