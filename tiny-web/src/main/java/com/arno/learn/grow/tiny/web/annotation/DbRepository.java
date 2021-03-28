@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * @desc: 标记 DB 配置类
- * @author: Arno.KV
+ * @author: angelica
  * @date: 2021/3/1 下午10:03
  * @version:
  */

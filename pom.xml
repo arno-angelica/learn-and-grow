@@ -32,6 +32,9 @@
         <javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
         <jstl.version>1.2</jstl.version>
         <javax-el-api.version>3.0.0</javax-el-api.version>
+        <javax.inject.version>1</javax.inject.version>
+        <javax.cdi-api.version>2.0</javax.cdi-api.version>
+        <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
 
         <!-- MicroProfile 依赖版本 -->
         <microprofile-config.version>2.0</microprofile-config.version>
@@ -99,6 +102,27 @@
                 <groupId>javax.el</groupId>
                 <artifactId>javax.el-api</artifactId>
                 <version>${javax-el-api.version}</version>
+            </dependency>
+
+            <!-- Java Commons Annotations -->
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>${javax.annotation-api.version}</version>
+            </dependency>
+
+            <!-- Java Inject API -->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${javax.inject.version}</version>
+            </dependency>
+
+            <!-- Java CDI API -->
+            <dependency>
+                <groupId>javax.enterprise</groupId>
+                <artifactId>cdi-api</artifactId>
+                <version>${javax.cdi-api.version}</version>
             </dependency>
 
             <!-- microprofile 依赖 -->

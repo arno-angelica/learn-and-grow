@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 /**
  * @desc: 初始化抽象类
- * @author: Arno.KV
+ * @author: angelica
  * @date: 2021/3/7 上午12:15
  * @version:
  */
