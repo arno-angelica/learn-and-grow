@@ -2,7 +2,6 @@ package com.arno.learn.grow.tiny.rest.clinet;
 
 import com.arno.learn.grow.tiny.rest.core.DefaultResponse;
 
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.core.GenericType;

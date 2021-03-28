@@ -9,74 +9,79 @@
 
 ## 改动点
 
-1. 调整主 pom.xml 的依赖顺序
-2. 去除 tiny-configuration 中的 servlet-api 依赖
-3. 在 tiny-web 中新增 `ServletMapBasedConfigSource` 类，继承 `MapBasedConfigSource`
-4. `ServletContextParamConfig` 调整，由原来继承 `MapBasedConfigSource` 改为继承 `ServletMapBasedConfigSource` 
+- 调整主 pom.xml 的依赖顺序
+- 去除 tiny-configuration 中的 servlet-api 依赖
+- 在 tiny-web 中新增 `ServletMapBasedConfigSource` 类，继承 `MapBasedConfigSource`
+- `ServletContextParamConfig` 调整，由原来继承 `MapBasedConfigSource` 改为继承 `ServletMapBasedConfigSource` 
 
-### 完成以下作业
+## 完成以下作业
 
-- **继续完善 my-rest-client POST 方法** 
-  - 提取抽象类
+### **作业一：继续完善 POST 方法** 
+
+- 提取抽象类 [**AbstractInvocation**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/main/java/com/arno/learn/grow/tiny/rest/clinet/AbstractInvocation.java)
+
+- [**HttpGetInvocation**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/main/java/com/arno/learn/grow/tiny/rest/clinet/HttpGetInvocation.java) 和 [**HttpPostInvocation**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/main/java/com/arno/learn/grow/tiny/rest/clinet/HttpGetInvocation.java) 继承 `AbstractInvocation`
+
+- 调整 `DefaultRespose` ，去除对 connection 的引用，将响应的流复制一份存储，避免 connection 关闭时无法读取流
+
+  ```java
+  private InputStream inputStream;
+  public void setInputStreamReader(InputStream inputStream) throws Exception {
+    this.inputStream = new ByteArrayInputStream(copyInputStream(inputStream).toByteArray());
+  }
+  ```
+
+- 测试类为 [**`RestClientDemo`**](https://github.com/arno-angelica/learn-and-grow/blob/fifth_refactor/tiny-rest/src/test/java/com/arno/learn/grow/tiny/rest/demo/RestClientDemo.java)
+
+- 测试方式
+
+  - mvn 打包项目，命令 `mvn clean package -U`
+
+    ![image-20210328200358042](mvn.png)
+
+  - 打包成功后， 启动 user-web 项目，命令 `java -jar user-web/target/user-web-1.0.0-SNAPSHOT-war-exec.jar `
+
+    - 启动时可能会报以下错误，原因是 pom 中引用了 tomcat 8的插件，而其中有些jar中增加了jdk9特性Module, 此错误不影响程序启动，可忽略，后续修复
+
+      ```java
+      org.apache.tomcat.util.bcel.classfile.ClassFormatException: Invalid byte tag in constant pool: 19
+        at org.apache.tomcat.util.bcel.classfile.Constant.readConstant(Constant.java:133)
+        at org.apache.tomcat.util.bcel.classfile.ConstantPool.<init>(ConstantPool.java:60)
+        at org.apache.tomcat.util.bcel.classfile.ClassParser.readConstantPool(ClassParser.java:209)
+        at org.apache.tomcat.util.bcel.classfile.ClassParser.parse(ClassParser.java:119)
+        at org.apache.catalina.startup.ContextConfig.processAnnotationsStream(ContextConfig.java:2105)
+        at org.apache.catalina.startup.ContextConfig.processAnnotationsJar(ContextConfig.java:1981)
+        at org.apache.catalina.startup.ContextConfig.processAnnotationsUrl(ContextConfig.java:1947)
+        at org.apache.catalina.startup.ContextConfig.processAnnotations(ContextConfig.java:1932)
+        at org.apache.catalina.startup.ContextConfig.webConfig(ContextConfig.java:1326)
+        at org.apache.catalina.startup.ContextConfig.configureStart(ContextConfig.java:878)
+        at org.apache.catalina.startup.ContextConfig.lifecycleEvent(ContextConfig.java:369)
+        at org.apache.catalina.util.LifecycleSupport.fireLifecycleEvent(LifecycleSupport.java:119)
+        at org.apache.catalina.util.LifecycleBase.fireLifecycleEvent(LifecycleBase.java:90)
+        at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5179)
+      
+      ```
+
+  - 访问`http://localhost:8080/` 随便注册一个用户
+
+    ![image-20210328201911887](注册.png)
+
+  - 执行 `RestClientDemo`
+
+  - 控制台输出 `RestClientDemo` 的结果
+
+    ![image-20210328202026730](输出.png)
+
+    
+
+### **作业二：修复本程序 reactive.streams 程序**
+
+
 
 ## 问题
 
-- ServletContextParamConfig 创建时如果直接实现父类（MapBasedConfigSource）之前的构造器会导致 servletContext 为空
+- 
 
-  ```java
-  // 之前默认的构造器
-  protected MapBasedConfigSource(String name, int ordinal) {
-    this.name = name;
-    this.ordinal = ordinal;
-    this.source = getProperties();
-  }
-  // 新增如下
-  protected ServletContext servletContext;
-  // 默认无参构造器
-  protected MapBasedConfigSource() {}
-  // 带servletContext 的构造器
-  protected MapBasedConfigSource(String name, int ordinal, ServletContext servletContext) {
-    this.name = name;
-    this.ordinal = ordinal;
-    this.servletContext = servletContext;
-    this.source = getProperties();
-  }
-  ```
-
-  - MapBasedConfigSource 中新增构造器和 servletContext 属性，子类创建时将 servletContext 交给父类托管，后续子类直接使用。
-  - 需注意子类创建有参构造器后，需再创建一个无参构造器，用于 class.instance 
-
-- DefaultResourceConfigSource 的 logger 属性为空，原实现如下
-
-  ```java
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
-  ```
-  - 方案一：将 Logger 属性的定义放置到父类
-  - 方案二：把 Logger 属性改为 static，本项目使用此方案
-
-  ```java
-  private static final Logger logger = Logger.getLogger(DefaultResourceConfigSource.class.getName());
-  ```
-
-- 使用 servletContext.addListener() 方法后，会出现如下异常
-
-  ```java
-  UnsupportedOperationException: Servlet 3.0规范的第4.4节不允许从未在web.xml，web-fragment.xml文件中定义或未用@WebListener注释的ServletContextListener调用此方法。
-  ```
-  - 本项目解决方式，自定接口 `ServletStartupInitializer`, 其实现类 `TinyApplicationContext` 中初始化各个组件。
 
 ## 后续优化点
-
-自研的这套 MVC 框架中用到了大量的反射，后续需结合 Java 的安全机制处理，如下
-
-```java
-if (System.getSecurityManager() != null) {
-  AccessController.doPrivileged((PrivilegedAction<Object>) () -> {});
-  try {
-    return AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () ->{});
-  } catch (PrivilegedActionException pae) {
-    throw pae.getException();
-  }
-}
-```
 

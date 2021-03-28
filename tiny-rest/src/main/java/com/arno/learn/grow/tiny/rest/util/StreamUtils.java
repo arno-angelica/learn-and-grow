@@ -9,10 +9,10 @@ import java.io.InputStream;
  * @date: 2021/3/28 下午7:34
  * @version:
  */
-public class StreamUtils {
+public interface StreamUtils {
 
 
-    public static ByteArrayOutputStream copyInputStream(InputStream input) throws Exception {
+    static ByteArrayOutputStream copyInputStream(InputStream input) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len;
