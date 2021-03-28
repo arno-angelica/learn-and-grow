@@ -20,7 +20,7 @@
 
 #### 链路说明
 
-![调用链路](../../../doc/learn-doc/image/javax.ws.rs.client 链路.png)
+![调用链路](javax.ws.rs.client 链路.png)
 
 #### 作业内容
 
