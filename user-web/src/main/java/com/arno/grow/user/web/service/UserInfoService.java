@@ -95,7 +95,15 @@ public class UserInfoService {
                 resp.setId(user.getId());
                 responses.add(resp);
             }
+            UserResponse resp = new UserResponse();
+            resp.setEmail("aaaa");
+            resp.setPhoneNumber("21312312312");
+            resp.setPassword("password");
+            resp.setName("王小二");
+            resp.setId(3L);
+            responses.add(resp);
         }
+
         return new BaseResult<>(responses);
     }
 

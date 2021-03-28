@@ -1,12 +1,23 @@
 # 2021.03.28 第五次重构说明
 
+## 本次主要目标
+
+1. **修复本程序 org.geektimes.reactive.streams 包下**
+2. **继续完善 my-rest-client POST 方法**
+3. **（可选）读一下 Servlet 3.0 关于 Servlet 异步**
+   1. **AsyncContext**
+
 ## 改动点
 
 1. 调整主 pom.xml 的依赖顺序
 2. 去除 tiny-configuration 中的 servlet-api 依赖
 3. 在 tiny-web 中新增 `ServletMapBasedConfigSource` 类，继承 `MapBasedConfigSource`
 4. `ServletContextParamConfig` 调整，由原来继承 `MapBasedConfigSource` 改为继承 `ServletMapBasedConfigSource` 
-5. 
+
+### 完成以下作业
+
+- **继续完善 my-rest-client POST 方法** 
+  - 提取抽象类
 
 ## 问题
 
