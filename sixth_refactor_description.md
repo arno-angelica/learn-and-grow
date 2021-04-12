@@ -56,7 +56,7 @@
 - 切换方式，通过` java -D` 方式切换
   - -Dserializable.type = JavaSerializable 为 java 序列化
   - -Dserializable.type = JacksonSerializable 为 Jackson 序列化
-  - ![image-20210412123613995](/Users/arno/workspace/source/learn-and-grow/image-20210412123613995.png)
+  - ![image-20210412123613995](image-20210412123613995.png)
 
 ## 作业二：实现 lettuceManager
 
@@ -73,7 +73,7 @@
 
 调整 [**AbstractCache**](https://github.com/arno-angelica/learn-and-grow/blob/sixth_refactor/tiny-cache/src/main/java/com/arno/learn/grow/tiny/cache/AbstractCache.java)，新增与子类共享属性 `SerializableProvider`
 
-![image-20210412124251505](/Users/arno/workspace/source/learn-and-grow/abstractCache.png)
+![image-20210412124251505](abstractCache.png)
 
 ## 测试说明
 
