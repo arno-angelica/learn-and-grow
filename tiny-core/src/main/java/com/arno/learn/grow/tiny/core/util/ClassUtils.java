@@ -97,7 +97,7 @@ public class ClassUtils {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         List<Class<?>> classes = new ArrayList<>();
         pathSet.forEach(path -> classes.addAll(findLoadClassInPackage(cl, path)));
-        return classes;
+        return classes.stream().distinct().collect(Collectors.toList());
     }
 
 

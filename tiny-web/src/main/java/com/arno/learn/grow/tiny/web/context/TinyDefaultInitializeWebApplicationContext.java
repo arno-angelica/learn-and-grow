@@ -29,6 +29,7 @@ public class TinyDefaultInitializeWebApplicationContext extends TinyAbstractInit
 
     private static final String SCAN_PACKAGE_KEY = "scan.package";
     private static final String SPLIT = ",";
+    private static final String DEFAULT_PAGE = "com.arno.learn.grow.tiny.*";
 
     private static final Set<Class<? extends Annotation>> scanAnnotationSet = new HashSet<>(5);
 
@@ -53,6 +54,7 @@ public class TinyDefaultInitializeWebApplicationContext extends TinyAbstractInit
         if (StringUtils.isBlank(scanPath)) {
             throw new ServiceConfigException("can not find scan.package in properties");
         }
+        scanPath = scanPath.endsWith(SPLIT) ? scanPath + DEFAULT_PAGE : scanPath + SPLIT + DEFAULT_PAGE;
         String[] scanPaths = scanPath.split(SPLIT);
         List<Class<?>> allClasses = ClassUtils.findLoadClassInPackages(scanPaths);
         if (allClasses != null && allClasses.size() > 0) {
