@@ -2,12 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>首页</title>
+    <style>
+        .container {
+            width: 500px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-<form method="get" action="/oauth/login">
-    <input type="submit" th:name="type" th:value="github">
-    <input type="submit" th:name="type" th:value="gitee"/>
-</form>
+<div class="container">
+    <h1> 登录成功 </h1>
+    <p th:text="${token}"></p>
+</div>
 </body>
 </html>
