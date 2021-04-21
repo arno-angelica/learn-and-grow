@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class GiteeOAuth implements OAuthBase {
-    private static final String GITEE_CLIENT_ID = "86e24f65eb90310d7d2730c525e82a197710a5f8c0b170015facca5d72ad5ec3";
-    private static final String GITEE_CLIENT_SECRET = "85fd50887809b82b35a5fb91914a5f51f08dcdc31f7effc3abbcb037adddb9f3";
+    private static final String GITEE_CLIENT_ID = "GITEE_CLIENT_ID";
+    private static final String GITEE_CLIENT_SECRET = "GITEE_CLIENT_SECRET";
 
     private static final String REDIRECT_URI = "http://localhost:8080/gitee/callback";
 

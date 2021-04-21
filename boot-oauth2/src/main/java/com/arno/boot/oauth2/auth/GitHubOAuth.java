@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class GitHubOAuth implements OAuthBase {
-    private static final String GITHUB_CLIENT_ID = "52c1293ba0e617d1dc9d";
-    private static final String GITHUB_CLIENT_SECRET = "e0ab6de536cd711ae0692fe9a7462e1fd01fbbce";
+    private static final String GITHUB_CLIENT_ID = "GITHUB_CLIENT_ID";
+    private static final String GITHUB_CLIENT_SECRET = "GITHUB_CLIENT_SECRET";
 
     /**
      * 登陆授权类型
