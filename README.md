@@ -3,6 +3,8 @@
 ## 调整说明
 
 
+[**第七次作业说明**](sixth_refactor_description.md)
+
 [**第六次作业说明**](sixth_refactor_description.md)
 
 [**第五次作业说明**](fifth_refactor_description.md)
