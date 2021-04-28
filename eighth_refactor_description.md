@@ -1,6 +1,9 @@
 # Security
 
-- 
+- 作业内容：
+  - 假设有两个 WebSecurityConfigurerAdapter Bean 定义，并且标注了不同的 @Order，其中一个关闭 CSRF，一个开启 CSRF，那么最终结果如何确定？
+- [测试验证代码](https://github.com/arno-angelica/learn-and-grow/tree/eighth_refactor/boot-oauth2/src/main/java/com/arno/boot/oauth2)
+- **详见 [Q3](#Q3) 和 [其他说明](#other_desc)** 
 
 # Java Security
 
@@ -586,7 +589,7 @@ private void insertSpringSecurityFilterChain(ServletContext servletContext) {
 
 **A：**1 对 N，详见章节 **Spring Security SecurityFilterChain** 
 
-### Q3：假设有两个 `WebSecurityConfigurerAdapter` Bean，并且标注了不同的 @Order，其中一个关闭 CSRF，另一个开启 CSRF，结果如何？
+### <span id="Q3">Q3：假设有两个 `WebSecurityConfigurerAdapter` Bean，并且标注了不同的 @Order，其中一个关闭 CSRF，另一个开启 CSRF，结果如何？</span>
 
 **测试**
 
@@ -671,7 +674,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 - **SecurityFilterChain 关联的 Filters 由 `FilterComparator` 创建， `FilterComparator` 被 `HttpSecurity` 创建，而 `HttpSecurity` 是被Spring IoC 容器管理生命周期。**
 
-## 其他说明
+## <span id = "other_desc">其他说明</span>
 
 Spring Security 5.4+ 版本可以不需继承 `WebSecurityConfigurerAdapter` 便可配置 `HttpSercurity`。
 
