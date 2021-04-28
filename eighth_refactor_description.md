@@ -746,4 +746,4 @@ HttpSecurity 是通过原型模式生成的，因此应用每次生成 `Security
 
 - 可通过 `@Order` 注明每个 `SecurityFilterChain` Bean 的顺序，该顺序将影响`FilterChainProxy#getFilters(javax.servlet.http.HttpServletRequest)` 的筛选，首先被命中的`SecurityFilterChain` 作为执行者，后面的将不被执行。
 - 同 Configuration 类中定义不同的 `SecurityFilterChain` Bean 且未标明顺序或顺序标注相同时，以方法定义的顺序由上往下存储在 `FilterChainProxy#filterChains`中。
-- 不同 Configuration 类定义不同的 `SecurityFilterChain` Bean 且未标明顺序或顺序标注相同时，可能会因 Configuration 类的加载顺序不同，导致到安全策略的执行不可控。开发者需自己去辨别哪个应该在前。
+- 不同 Configuration 类定义不同的 `SecurityFilterChain` Bean 且未标明顺序或顺序标注相同时，Spring 会根据类文件的顺序加载Bean，当环境不同时可能会因 Configuration 类的加载顺序不同，导致到安全策略的执行不可控，开发者需自己去辨别哪个应该在前。
