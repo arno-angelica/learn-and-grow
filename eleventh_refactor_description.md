@@ -2,26 +2,16 @@
 
 ## 作业内容：
 
-- 完善 `@org.geektimes.projects.user.mybatis.annotation.Enable MyBatis` 实现，尽可能多地注入 `org.mybatis.spring.SqlSessionFactoryBean` 中依赖的组件非作业内容
+- 将上次 MyBatis @Enable 模块驱动，封装成 Spring Boot Starter 方式参考：MyBatis Spring Project 里面会有 Spring Boot 实现
 
 ## 作业实现
 
 ### 1. 实现代码
 
-- [**@EnableMybatis**](https://github.com/arno-angelica/learn-and-grow/blob/tenth_refactor/spring-user-web/src/main/java/com/arno/mybatis/annotation/EnableMybatis.java)
-- [**BeanDefiniitionRegistrar**](https://github.com/arno-angelica/learn-and-grow/blob/tenth_refactor/spring-user-web/src/main/java/com/arno/mybatis/annotation/EnableMybatis.java)
+- [**AutoAssembleMybatisConfig**](https://github.com/huairho/learn-and-grow/blob/eleventh_refactor/mybatis-boot-start/src/main/java/com/arno/mybatis/boot/start/auto/AutoAssembleMybatisConfig.java)
+- [**MybatisConfig**](https://github.com/huairho/learn-and-grow/blob/eleventh_refactor/mybatis-boot-start/src/main/java/com/arno/mybatis/boot/start/auto/MybatisConfig.java)
 
 ### 2. 测试用例
 
-[**测试类目录**](https://github.com/arno-angelica/learn-and-grow/tree/tenth_refactor/spring-user-web/src/test/java/com/arno/mybatis)
-
-[**Mapper.xml 文件**](https://github.com/arno-angelica/learn-and-grow/tree/tenth_refactor/spring-user-web/src/test/resources/mapper)
-
-[**EnableMybatisTest**](https://github.com/arno-angelica/learn-and-grow/blob/tenth_refactor/spring-user-web/src/test/java/com/arno/mybatis/EnableMybatisTest.java)
-
-### 3. 输出结果
-
-```text
-[Person{id=2, name='3'}, Person{id=3, name='2'}, Person{id=123, name='呜啦啦啦'}]
-```
+[**测试类**](https://github.com/huairho/learn-and-grow/blob/eleventh_refactor/mybatis-boot-start/src/main/java/com/arno/mybatis/boot/start/MybatisApplication.java)
 
