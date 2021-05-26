@@ -23,6 +23,7 @@
         <module>tiny-cache</module>
         <module>tiny-oauth2</module>
         <module>spring-user-web</module>
+        <module>mybatis-boot-start</module>
     </modules>
 
     <properties>
@@ -70,7 +71,7 @@
         <mybatis-spring.version>2.0.6</mybatis-spring.version>
         <diurd.version>1.0.19</diurd.version>
         <spring-dao.version>2.0.8</spring-dao.version>
-        <spring-jdbc.version>3.2.18.RELEASE</spring-jdbc.version>
+        <spring-jdbc.version>5.3.4</spring-jdbc.version>
         <mysql-driver.version>5.1.38</mysql-driver.version>
 
         <!-- Testing 版本 -->
@@ -92,6 +93,15 @@
         <!-- Artifacts 依赖版本管理 -->
 
         <dependencies>
+
+            <!-- Spring Boot Dependencies -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- Servlet 3.1 API -->
             <dependency>
                 <groupId>javax.servlet</groupId>
